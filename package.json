@@ -1,0 +1,25 @@
+{
+  "name": "tgc16-p3-be",
+  "version": "1.0.0",
+  "description": "![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caracara6/tgc16-p3-be.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caracara6/tgc16-p3-be/issues"
+  },
+  "homepage": "https://github.com/caracara6/tgc16-p3-be#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "hbs": "^4.2.0",
+    "wax-on": "^1.2.2"
+  }
+}
