@@ -13,6 +13,12 @@
       "**/CVS": true
    },
    "files.autoSave": "afterDelay",
-   "workbench.colorTheme": "Visual Studio Dark",
-   "editor.defaultFormatter": "HookyQR.beautify"
+   "workbench.colorTheme": "Quiet Light",
+   "editor.defaultFormatter": "HookyQR.beautify",
+   "[handlebars]": {
+      "editor.defaultFormatter": "vscode.html-language-features"
+   },
+   "[javascript]": {
+      "editor.defaultFormatter": "vscode.typescript-language-features"
+   }
 }
