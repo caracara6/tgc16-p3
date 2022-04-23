@@ -1,9 +1,0 @@
-{
-    "dev": {
-      "driver": "mysql",
-      "user": "foo",
-      "password":"bar",
-      "database":"tgc16p3",
-      "host": "localhost"
-    }
-  }
