@@ -13,6 +13,7 @@
       <th scope="col">Id</th>
       <th scope="col">Name</th>
       <th scope="col">Volume in ml</th>
+      <th scope="col">Action</th>
 
     </tr>
   </thead>
@@ -22,6 +23,10 @@
         <td>{{this.id}}</td>
         <td>{{this.name}}</td>
         <td>{{this.volume}}</td>
+        <td>
+            <a class="btn btn-primary btn-sm" href="/product-related/size/{{this.id}}/update">Update</a>
+            <a class="btn btn-danger btn-sm" href="/product-related/size/{{this.id}}/delete">Delete</a>
+        </td>
     </tr>
     {{/each}}
   </tbody>

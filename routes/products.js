@@ -43,7 +43,7 @@ router.get('/size', async function(req, res){
     })
 })
 
-router.get('/size/create', async (req, res)=>{
+router.get('/size/create', async function (req, res){
     const form = sizeForm();
     res.render('product_related/size/create',{
         'form': form.toHTML(bootstrapField)
@@ -64,7 +64,7 @@ router.post('/size/create', async (req, res) => {
             // size.set(formData);
             await size.save()
 
-            res.redirect('/');
+            res.redirect('/product-related/size');
         },
         'error':async(form) => {
             res.render('product_related/size/create',{
@@ -72,6 +72,56 @@ router.post('/size/create', async (req, res) => {
             })
         }
     })
+})
+
+router.get('/size/:size_id/update', async function(req, res){
+    const size = await productDAL.getSizeByID(req.params.size_id);
+
+    const form = sizeForm();
+    form.fields.name.value = size.get('name')
+    form.fields.volume.value = size.get('volume')
+
+    res.render('product_related/size/update', {
+        form: form.toHTML(bootstrapField),
+        size: size.toJSON()
+    })
+})
+
+router.post('/size/:size_id/update', async function(req, res){
+    const size = await productDAL.getSizeByID(req.params.size_id);
+
+    const form = sizeForm();
+    
+    form.handle(req, {
+        'success' : async (form) => {
+            let { ...formData } = form.data;
+            
+            size.set(formData);
+            await size.save();
+
+            res.redirect('/product-related/size');
+        },
+        'error':async(form) => {
+            res.render('product_related/size/create',{
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    
+    })
+    
+})
+
+router.get('/size/:size_id/delete', async function (req, res) {
+    const size = await productDAL.getSizeByID(req.params.size_id);
+    res.render('product_related/size/delete', {
+        size: size.toJSON()
+    })
+})
+
+router.post('/size/:size_id/delete', async function (req, res) {
+    const size = await productDAL.getSizeByID(req.params.size_id);
+    await size.destroy();
+    res.redirect('/product-related/size')
 })
 
 module.exports = router;
