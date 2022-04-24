@@ -35,6 +35,8 @@ router.get('/', async function(req, res) {
     res.render('product_related/index')
 })
 
+//SIZES CRUD STARTS
+
 router.get('/size', async function(req, res){
     let sizes = (await Size.fetchAll()).toJSON();
 
@@ -210,5 +212,91 @@ router.post('/country/:country_id/delete', async function (req, res) {
     await country.destroy();
     res.redirect('/product-related/country')
 })
+
+//ORIGIN COUNTRIES CRUD ENDS
+
+router.get('/region', async function(req, res){
+    let regions = (await Region.fetchAll()).toJSON();
+
+    res.render('product_related/region/index', {
+        regions
+    })
+})
+
+router.get('/region/create', async function (req, res){
+    const form = regionForm();
+    res.render('product_related/region/create',{
+        'form': form.toHTML(bootstrapField)
+    })
+})
+
+router.post('/region/create', async (req, res) => {
+    const form = regionForm();
+
+    form.handle(req, {
+        'success' : async (form) => {
+            let { ...formData } = form.data
+
+            const region = new Region(formData);
+        
+            await region.save()
+
+            res.redirect('/product-related/region');
+        },
+        'error':async(form) => {
+            res.render('product_related/region/create',{
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+router.get('/region/:region_id/update', async function(req, res){
+    const region = await productDAL.getRegionByID(req.params.region_id);
+
+    const form = regionForm();
+    form.fields.name.value = region.get('name')
+
+    res.render('product_related/region/update', {
+        form: form.toHTML(bootstrapField),
+        region: region.toJSON()
+    })
+})
+
+router.post('/region/:region_id/update', async function(req, res){
+    const region = await productDAL.getRegionByID(req.params.region_id);
+
+    const form = regionForm();
+    
+    form.handle(req, {
+        'success' : async (form) => {
+            let { ...formData } = form.data;
+            
+            region.set(formData);
+            await region.save();
+
+            res.redirect('/product-related/region');
+        },
+        'error':async(form) => {
+            res.render('product_related/region/update',{
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+router.get('/region/:region_id/delete', async function (req, res) {
+    const region = await productDAL.getRegionByID(req.params.region_id);
+    res.render('product_related/region/delete', {
+        region: region.toJSON()
+    })
+})
+
+router.post('/region/:region_id/delete', async function (req, res) {
+    const region = await productDAL.getRegionByID(req.params.region_id);
+    await region.destroy();
+    res.redirect('/product-related/region')
+})
+
 
 module.exports = router;

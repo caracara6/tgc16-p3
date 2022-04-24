@@ -35,6 +35,12 @@ async function getAllRegions() {
     return allRegions
 }
 
+async function getRegionByID(regionId) {
+    return await Region.where({
+        'id': regionId
+    }).fetch()
+}
+
 async function getAllProducers() {
     const allProducers = await Producer.fetchAll().map( 
         producer => [producer.get('id'), producer.get('name')]
@@ -73,6 +79,7 @@ module.exports = {
     getAllCountries,
     getCountryByID,
     getAllRegions,
+    getRegionByID,
     getAllProducers,
     getAllSizes,
     getSizeByID,
