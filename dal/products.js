@@ -68,6 +68,13 @@ async function getAllGrapeVarietals() {
     return allGrapeVarietals
 }
 
+async function getGrapeVarietalByID(grapeVarietalId) {
+    return await GrapeVarietal.where({
+        'id': grapeVarietalId
+    }).fetch()
+}
+
+
 async function getAllProducts() {
     return await Product.fetchAll();
 }
@@ -84,5 +91,6 @@ module.exports = {
     getAllSizes,
     getSizeByID,
     getAllGrapeVarietals,
+    getGrapeVarietalByID,
     getAllProducts
 }

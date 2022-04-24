@@ -215,6 +215,8 @@ router.post('/country/:country_id/delete', async function (req, res) {
 
 //ORIGIN COUNTRIES CRUD ENDS
 
+//REGIONS CRUD STARTS
+
 router.get('/region', async function(req, res){
     let regions = (await Region.fetchAll()).toJSON();
 
@@ -297,6 +299,98 @@ router.post('/region/:region_id/delete', async function (req, res) {
     await region.destroy();
     res.redirect('/product-related/region')
 })
+
+//REGIONS CRUD ENDS
+
+
+//GRAPE VARIETAL CRUD STARTS
+
+router.get('/grape-varietal', async function(req, res){
+    let grapeVarietals = (await GrapeVarietal.fetchAll()).toJSON();
+
+    res.render('product_related/grape_varietal/index', {
+        grapeVarietals
+    })
+})
+
+router.get('/grape-varietal/create', async function (req, res){
+    const form = grapeVarietalForm();
+    res.render('product_related/grape_varietal/create',{
+        'form': form.toHTML(bootstrapField)
+    })
+})
+
+router.post('/grape-varietal/create', async (req, res) => {
+    const form = grapeVarietalForm();
+
+    form.handle(req, {
+        'success' : async (form) => {
+            let { ...formData } = form.data
+
+            const grapeVarietal = new GrapeVarietal(formData);
+        
+            await grapeVarietal.save()
+
+            res.redirect('/product-related/grape-varietal');
+        },
+        'error':async(form) => {
+            res.render('product_related/grape_varietal/create',{
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+router.get('/grape-varietal/:grape_varietal_id/update', async function(req, res){
+    const grapeVarietal = await productDAL.getGrapeVarietalByID(req.params.grape_varietal_id);
+
+    const form = regionForm();
+    form.fields.name.value = grapeVarietal.get('name')
+
+    res.render('product_related/grape_varietal/update', {
+        form: form.toHTML(bootstrapField),
+        grapeVarietal: grapeVarietal.toJSON()
+    })
+})
+
+router.post('/grape-varietal/:grape_varietal_id/update', async function(req, res){
+    const grapeVarietal = await productDAL.getGrapeVarietalByID(req.params.grape_varietal_id);
+
+    const form = regionForm();
+    
+    form.handle(req, {
+        'success' : async (form) => {
+            let { ...formData } = form.data;
+            
+            grapeVarietal.set(formData);
+            await grapeVarietal.save();
+
+            res.redirect('/product-related/grape-varietal');
+        },
+        'error':async(form) => {
+            res.render('product_related/grape_varietal/update',{
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+router.get('/grape-varietal/:grape_varietal_id/delete', async function (req, res) {
+    const grapeVarietal = await productDAL.getGrapeVarietalByID(req.params.grape_varietal_id);
+    res.render('product_related/grape_varietal/delete', {
+        grapeVarietal: grapeVarietal.toJSON()
+    })
+})
+
+router.post('/grape-varietal/:grape_varietal_id/delete', async function (req, res) {
+    const grapeVarietal = await productDAL.getGrapeVarietalByID(req.params.grape_varietal_id);
+    await grapeVarietal.destroy();
+    res.redirect('/product-related/grape-varietal')
+})
+
+//GRAPE VARIETAL CRUD ENDS
+
+
 
 
 module.exports = router;
