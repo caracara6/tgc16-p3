@@ -17,11 +17,17 @@ const Producer = bookshelf.model('Producer', {
 });
 
 const Size = bookshelf.model('Size', {
-    tableName:'size'
+    tableName:'size',
+    products:function(){
+        return this.belongsToMany('Product')
+    }
 });
 
 const GrapeVarietal = bookshelf.model('GrapeVarietal', {
-    tableName:'grape_varietal'
+    tableName:'grape_varietal',
+    products:function(){
+        return this.belongsToMany('Product')
+    }
 });
 
 const Product = bookshelf.model('Product', {
@@ -38,10 +44,10 @@ const Product = bookshelf.model('Product', {
     producer() {
         return this.belongsTo('Producer')
     },
-    grape_varietal() {
+    grape_varietals() {
         return this.belongsToMany('GrapeVarietal');
     },
-    size() {
+    sizes() {
         return this.belongsToMany('Size');
     }
     
