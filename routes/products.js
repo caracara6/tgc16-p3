@@ -102,13 +102,11 @@ router.post('/size/:size_id/update', async function(req, res){
             res.redirect('/product-related/size');
         },
         'error':async(form) => {
-            res.render('product_related/size/create',{
+            res.render('product_related/size/update',{
                 'form': form.toHTML(bootstrapField)
             })
         }
-    
     })
-    
 })
 
 router.get('/size/:size_id/delete', async function (req, res) {
@@ -122,6 +120,95 @@ router.post('/size/:size_id/delete', async function (req, res) {
     const size = await productDAL.getSizeByID(req.params.size_id);
     await size.destroy();
     res.redirect('/product-related/size')
+})
+
+//SIZES CRUD ENDS
+
+
+
+//ORIGIN COUNTRIES CRUD STARTS
+
+router.get('/country', async function(req, res){
+    let countries = (await OriginCountry.fetchAll()).toJSON();
+
+    res.render('product_related/country/index', {
+        countries
+    })
+})
+
+router.get('/country/create', async function (req, res){
+    const form = countryForm();
+    res.render('product_related/country/create',{
+        'form': form.toHTML(bootstrapField)
+    })
+})
+
+router.post('/country/create', async (req, res) => {
+    const form = countryForm();
+
+    form.handle(req, {
+        'success' : async (form) => {
+            let { ...formData } = form.data
+
+            const country = new OriginCountry(formData);
+        
+            await country.save()
+
+            res.redirect('/product-related/country');
+        },
+        'error':async(form) => {
+            res.render('product_related/country/create',{
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+router.get('/country/:country_id/update', async function(req, res){
+    const country = await productDAL.getCountryByID(req.params.country_id);
+
+    const form = countryForm();
+    form.fields.name.value = country.get('name')
+
+    res.render('product_related/country/update', {
+        form: form.toHTML(bootstrapField),
+        country: country.toJSON()
+    })
+})
+
+router.post('/country/:country_id/update', async function(req, res){
+    const country = await productDAL.getCountryByID(req.params.country_id);
+
+    const form = countryForm();
+    
+    form.handle(req, {
+        'success' : async (form) => {
+            let { ...formData } = form.data;
+            
+            country.set(formData);
+            await country.save();
+
+            res.redirect('/product-related/country');
+        },
+        'error':async(form) => {
+            res.render('product_related/country/update',{
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+router.get('/country/:country_id/delete', async function (req, res) {
+    const country = await productDAL.getCountryByID(req.params.country_id);
+    res.render('product_related/country/delete', {
+        country: country.toJSON()
+    })
+})
+
+router.post('/country/:country_id/delete', async function (req, res) {
+    const country = await productDAL.getCountryByID(req.params.country_id);
+    await country.destroy();
+    res.redirect('/product-related/country')
 })
 
 module.exports = router;

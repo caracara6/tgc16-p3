@@ -22,6 +22,12 @@ async function getAllCountries() {
     return allCountries
 }
 
+async function getCountryByID(sizeId) {
+    return await OriginCountry.where({
+        'id': sizeId
+    }).fetch()
+}
+
 async function getAllRegions() {
     const allRegions = await Region.fetchAll().map( 
         region => [region.get('id'), region.get('name')]
@@ -64,7 +70,8 @@ async function getAllProducts() {
 
 module.exports = {
     getAllCategories, 
-    getAllCountries, 
+    getAllCountries,
+    getCountryByID,
     getAllRegions,
     getAllProducers,
     getAllSizes,

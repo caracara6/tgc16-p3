@@ -4,7 +4,7 @@
 
 <div class="m-3">
 
-        <a role="button" class="btn btn-primary" href="/product-related/size/create">List New Size</a>
+        <a role="button" class="btn btn-primary" href="/product-related/country/create">List New Country</a>
 
 
     <table class="table">
@@ -12,20 +12,18 @@
     <tr>
       <th scope="col">Id</th>
       <th scope="col">Name</th>
-      <th scope="col">Volume in ml</th>
       <th scope="col">Action</th>
 
     </tr>
   </thead>
   <tbody>
-    {{#each sizes}}
+    {{#each countries}}
     <tr>
         <td>{{this.id}}</td>
         <td>{{this.name}}</td>
-        <td>{{this.volume}}</td>
         <td>
-            <a class="btn btn-primary btn-sm" href="/product-related/size/{{this.id}}/update">Update</a>
-            <a class="btn btn-danger btn-sm" href="/product-related/size/{{this.id}}/delete">Delete</a>
+            <a class="btn btn-primary btn-sm" href="/product-related/country/{{this.id}}/update">Update</a>
+            <a class="btn btn-danger btn-sm" href="/product-related/country/{{this.id}}/delete">Delete</a>
         </td>
     </tr>
     {{/each}}
