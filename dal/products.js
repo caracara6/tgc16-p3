@@ -86,9 +86,26 @@ async function getGrapeVarietalByID(grapeVarietalId) {
     }).fetch()
 }
 
-
 async function getAllProducts() {
     return await Product.fetchAll();
+}
+
+async function getProductById(productId) {
+
+    return await Product.where({
+        'id': productId
+    }).fetch({
+        'require': true, 
+        'withRelated': [
+            'category', 
+            'origin_country', 
+            'region', 
+            'producer', 
+            'grape_varietals', 
+            'sizes'
+        ] 
+    });
+
 }
 
 
@@ -106,5 +123,6 @@ module.exports = {
     getSizeByID,
     getAllGrapeVarietals,
     getGrapeVarietalByID,
-    getAllProducts
+    getAllProducts,
+    getProductById
 }

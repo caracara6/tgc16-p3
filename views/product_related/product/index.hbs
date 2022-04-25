@@ -1,0 +1,77 @@
+{{#extends 'base'}}
+
+{{#block "content"}}
+
+<div class="m-3">
+
+        <a role="button" class="btn btn-primary" href="/product-related/product/create">List New Product</a>
+
+
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+
+      <th scope="col">Origin Country</th>
+      <th scope="col">Region</th>
+      <th scope="col">Category</th>
+      <th scope="col">Producer</th>
+            <th scope="col">Size</th>
+      <th scope="col">Grape Varietal</th>
+
+      <th scope="col">Nose attributes</th>
+      <th scope="col">Mouth attributes</th>
+      <th scope="col">Alcohol percentage</th>
+      <th scope="col">Price</th>
+      <th scope="col">Vintage</th>
+      <th scope="col">Quantity in stock</th>
+      <th scope="col">Image</th>
+      <th scope="col">Action</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {{#each products}}
+    <tr>
+        <td>{{this.id}}</td>
+        <td>{{this.name}}</td>
+        <td>{{this.description}}</td>
+
+        <td>{{this.origin_country.name}}</td>
+        <td>{{this.region.name}}</td>
+        <td>{{this.category.name}}</td>
+        <td>{{this.producer.name}}</td>
+        <td>
+          {{#each this.sizes}}
+                    <span class="badge bg-primary">{{this.name}}</span>
+                    {{/each}}
+        </td>
+        <td>
+          {{#each this.grape_varietals}}
+                    <span class="badge bg-primary">{{this.name}}</span>
+                    {{/each}}
+        </td>
+
+        <td>{{this.nose_attribute}}</td>
+        <td>{{this.mouth_attribute}}</td>
+        <td>{{this.alcohol_percentage}}</td>
+        <td>{{this.price}}</td>
+        <td>{{this.vintage}}</td>
+        <td>{{this.stock}}</td>
+        <td><img src="{{this.image_url}}" class="img-fluid"/></td>
+        <td>
+            <a class="btn btn-primary btn-sm" href="/product-related/product/{{this.id}}/update">Update</a>
+            <a class="btn btn-danger btn-sm" href="/product-related/product/{{this.id}}/delete">Delete</a>
+        </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+</div>
+
+{{/block}}
+
+{{/extends}}

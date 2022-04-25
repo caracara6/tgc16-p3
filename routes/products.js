@@ -121,7 +121,6 @@ router.get('/category/:category_id/delete', async function (req, res) {
 router.post('/category/:category_id/delete', async function (req, res) {
     const category = await productDAL.getCategoryById(req.params.category_id);
     await category.destroy();
-    req.flash("success_msg", `Category ${category.get('name')} has been deleted`)
     res.redirect('/product-related/category')
 })
 
@@ -218,7 +217,6 @@ router.get('/size/:size_id/delete', async function (req, res) {
 router.post('/size/:size_id/delete', async function (req, res) {
     const size = await productDAL.getSizeByID(req.params.size_id);
     await size.destroy();
-    req.flash("success_msg", `Bottle size ${size.get('name')} has been deleted`)
     res.redirect('/product-related/size')
 })
 
@@ -312,7 +310,6 @@ router.get('/country/:country_id/delete', async function (req, res) {
 router.post('/country/:country_id/delete', async function (req, res) {
     const country = await productDAL.getCountryByID(req.params.country_id);
     await country.destroy();
-    req.flash("success_msg", `Origin country ${country.get('name')} has been deleted`)
     res.redirect('/product-related/country')
 })
 
@@ -404,7 +401,6 @@ router.get('/region/:region_id/delete', async function (req, res) {
 router.post('/region/:region_id/delete', async function (req, res) {
     const region = await productDAL.getRegionByID(req.params.region_id);
     await region.destroy();
-    req.flash("success_msg", `Region ${region.get('name')} has been deleted`)
     res.redirect('/product-related/region')
 })
 
@@ -497,7 +493,6 @@ router.get('/grape-varietal/:grape_varietal_id/delete', async function (req, res
 router.post('/grape-varietal/:grape_varietal_id/delete', async function (req, res) {
     const grapeVarietal = await productDAL.getGrapeVarietalByID(req.params.grape_varietal_id);
     await grapeVarietal.destroy();
-    req.flash("success_msg", `Grape varietal ${grapeVarietal.get('name')} has been deleted`)
     res.redirect('/product-related/grape-varietal')
 })
 
@@ -540,7 +535,10 @@ router.post('/producer/create', async (req, res) => {
         },
         'error': async (form) => {
             res.render('product_related/producer/create', {
-                'form': form.toHTML(bootstrapField)
+                'form': form.toHTML(bootstrapField),
+                'cloudinaryName': process.env.CLOUDINARY_NAME,
+                'cloudinaryApiKey': process.env.CLOUDINARY_API_KEY,
+                'cloudinaryPreset': process.env.CLOUDINARY_UPLOAD_PRESET
             })
         }
     })
@@ -581,7 +579,10 @@ router.post('/producer/:producer_id/update', async function (req, res) {
         },
         'error': async (form) => {
             res.render('product_related/region/update', {
-                'form': form.toHTML(bootstrapField)
+                'form': form.toHTML(bootstrapField),
+                'cloudinaryName': process.env.CLOUDINARY_NAME,
+                'cloudinaryApiKey': process.env.CLOUDINARY_API_KEY,
+                'cloudinaryPreset': process.env.CLOUDINARY_UPLOAD_PRESET
             })
         }
     })
@@ -597,11 +598,241 @@ router.get('/producer/:producer_id/delete', async function (req, res) {
 router.post('/producer/:producer_id/delete', async function (req, res) {
     const producer = await productDAL.getProducerById(req.params.producer_id);
     await producer.destroy();
-    req.flash("success_msg", `Wine producer ${producer.get('name')} has been deleted`)
     res.redirect('/product-related/producer')
 })
 
 //PRODUCER CRUD ENDS
+
+//PRODUCT CRUD STARTS
+
+router.get('/product', async function (req, res) {
+    // let products = await productDAL.getAllProducts();
+
+    let products = await Product.collection().fetch({
+        withRelated: ['category', 'origin_country', 'region', 'producer', 'grape_varietals', 'sizes']
+    })
+
+    res.render('product_related/product/index', {
+        products: products.toJSON()
+    })
+})
+
+router.get('/product/create', async function (req, res) {
+
+    const allCategories = await productDAL.getAllCategories()
+    const allCountries = await productDAL.getAllCountries()
+    const allRegions = await productDAL.getAllRegions()
+    const allProducers = await productDAL.getAllProducers()
+    const allSizes = await productDAL.getAllSizes()
+    const allGrapeVarietals = await productDAL.getAllGrapeVarietals()
+
+
+    const form = productForm(
+        allCategories,
+        allCountries,
+        allRegions,
+        allProducers,
+        allGrapeVarietals,
+        allSizes,
+
+    );
+
+    res.render('product_related/product/create', {
+        'form': form.toHTML(bootstrapField),
+        'cloudinaryName': process.env.CLOUDINARY_NAME,
+        'cloudinaryApiKey': process.env.CLOUDINARY_API_KEY,
+        'cloudinaryPreset': process.env.CLOUDINARY_UPLOAD_PRESET
+    })
+})
+
+router.post('/product/create', async (req, res) => {
+
+    const allCategories = await productDAL.getAllCategories()
+    const allCountries = await productDAL.getAllCountries()
+    const allRegions = await productDAL.getAllRegions()
+    const allProducers = await productDAL.getAllProducers()
+    const allGrapeVarietals = await productDAL.getAllGrapeVarietals()
+    const allSizes = await productDAL.getAllSizes()
+
+
+    const form = productForm(
+        allCategories,
+        allCountries,
+        allRegions,
+        allProducers,
+        allGrapeVarietals,
+        allSizes,
+
+    );
+
+    form.handle(req, {
+        'success': async (form) => {
+
+            const product = new Product();
+
+            let {
+                sizes, grape_varietals,
+                ...restData
+            } = form.data;
+
+            product.set(restData);
+
+            await product.save();
+
+            if (sizes) {
+                await product.sizes().attach(sizes.split(','))
+            }
+
+            if (grape_varietals) {
+                console.log(grape_varietals)
+                await product.grape_varietals().attach(grape_varietals.split(','))
+            }
+
+
+            req.flash("success_msg", "New product has been created successfully!")
+            res.redirect('/product-related/product');
+        },
+        'error': async (form) => {
+            res.render('products/create', {
+                'form': form.toHTML(bootstrapField),
+                'cloudinaryName': process.env.CLOUDINARY_NAME,
+                'cloudinaryApiKey': process.env.CLOUDINARY_API_KEY,
+                'cloudinaryPreset': process.env.CLOUDINARY_UPLOAD_PRESET
+            })
+        }
+    })
+})
+
+router.get('/product/:product_id/update', async function (req, res) {
+
+    const product = await productDAL.getProductById(req.params.product_id)
+
+    const allCategories = await productDAL.getAllCategories()
+    const allCountries = await productDAL.getAllCountries()
+    const allRegions = await productDAL.getAllRegions()
+    const allProducers = await productDAL.getAllProducers()
+    const allSizes = await productDAL.getAllSizes()
+    const allGrapeVarietals = await productDAL.getAllGrapeVarietals()
+
+
+    const form = productForm(
+        allCategories,
+        allCountries,
+        allRegions,
+        allProducers,
+        allGrapeVarietals,
+        allSizes,
+    );
+
+    form.fields.name.value = product.get('name');
+    form.fields.description.value = product.get('description');
+    form.fields.nose_attribute.value = product.get('nose_attribute');
+    form.fields.mouth_attribute.value = product.get('mouth_attribute');
+    form.fields.category_id.value = product.get('category_id');
+    form.fields.producer_id.value = product.get('producer_id');
+    form.fields.origin_country_id.value = product.get('origin_country_id');
+    form.fields.region_id.value = product.get('region_id');
+    form.fields.alcohol_percentage.value = product.get('alcohol_percentage');
+    form.fields.price.value = product.get('price');
+    form.fields.stock.value = product.get('stock');
+    form.fields.vintage.value = product.get('vintage');
+    form.fields.image_url.value = product.get('image_url')
+
+    let selectedSizes = await product.related('sizes').pluck('id');
+    let selectedGrapeVarietals = await product.related('grape_varietals').pluck('id');
+    form.fields.sizes.value = selectedSizes;
+    form.fields.grape_varietals.value = selectedGrapeVarietals;
+
+
+
+    res.render('product_related/product/update', {
+        'form': form.toHTML(bootstrapField),
+        'product': product.toJSON(),
+        'cloudinaryName': process.env.CLOUDINARY_NAME,
+        'cloudinaryApiKey': process.env.CLOUDINARY_API_KEY,
+        'cloudinaryPreset': process.env.CLOUDINARY_UPLOAD_PRESET
+    })
+})
+
+router.post('/product/:product_id/update', async function (req, res) {
+    const product = await productDAL.getProductById(req.params.product_id);
+
+    const allCategories = await productDAL.getAllCategories()
+    const allCountries = await productDAL.getAllCountries()
+    const allRegions = await productDAL.getAllRegions()
+    const allProducers = await productDAL.getAllProducers()
+    const allSizes = await productDAL.getAllSizes()
+    const allGrapeVarietals = await productDAL.getAllGrapeVarietals()
+
+    const form = productForm(
+        allCategories,
+        allCountries,
+        allRegions,
+        allProducers,
+        allGrapeVarietals,
+        allSizes,
+    );
+
+    form.handle(req, {
+        'success': async (form) => {
+
+            let {
+                sizes,
+                grape_varietals,
+                ...restData
+            } = form.data;
+
+            product.set(restData);
+
+            await product.save();
+
+            let selectedSizesIds = sizes.split(',');
+            let existingSizes = await product.related('sizes').pluck('id');
+            let toRemoveSizes = existingSizes.filter(id => selectedSizesIds.includes(id) === false);
+
+            await product.sizes().detach(toRemoveSizes);
+            await product.sizes().attach(selectedSizesIds)
+
+            let selectedGrapeVarietalsIds = grape_varietals.split(',');
+            let existingGrapeVarietals = await product.related('grape_varietals').pluck('id');
+            let toRemoveGrapeVarietals = existingGrapeVarietals.filter(id => selectedGrapeVarietalsIds.includes(id) === false);
+
+            await product.grape_varietals().detach(toRemoveGrapeVarietals);
+            await product.grape_varietals().attach(selectedGrapeVarietalsIds)
+
+
+            req.flash("success_msg", "Product has been updated successfully!")
+            res.redirect('/product-related/product');
+        },
+        'error': async (form) => {
+            res.render('product_related/product/update', {
+                'form': form.toHTML(bootstrapField),
+                'cloudinaryName': process.env.CLOUDINARY_NAME,
+                'cloudinaryApiKey': process.env.CLOUDINARY_API_KEY,
+                'cloudinaryPreset': process.env.CLOUDINARY_UPLOAD_PRESET
+            })
+        }
+    })
+
+})
+
+
+router.get('/product/:product_id/delete', async function (req, res) {
+    const product = await productDAL.getProductById(req.params.product_id);
+    res.render('product_related/product/delete', {
+        product: product.toJSON()
+    })
+})
+
+router.post('/product/:product_id/delete', async function (req, res) {
+    const product = await productDAL.getProductById(req.params.product_id);
+    await product.destroy();
+    res.redirect('/product-related/product')
+})
+
+
+//PRODUCT CRUD ENDS
+
 
 
 

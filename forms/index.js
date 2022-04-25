@@ -130,7 +130,7 @@ const producerForm = () => {
 }
 
 
-const productForm = (originCountries, regions, categories, producers, grapeVarietals, sizes) => {
+const productForm = (categories, originCountries, regions, producers, grapeVarietals, sizes) => {
     return forms.create({
         name: fields.string({
             label: 'Name of wine',
@@ -143,6 +143,7 @@ const productForm = (originCountries, regions, categories, producers, grapeVarie
         }),
         description: fields.string({
             label: 'Wine Description',
+            widget: widgets.textarea(),
             errorAfterField: true,
             validators: [
                 validators.maxlength(1000, "Please enter a description shorter than 1000 characters")
@@ -184,7 +185,7 @@ const productForm = (originCountries, regions, categories, producers, grapeVarie
             choices: grapeVarietals
         }),
         sizes: fields.string({
-            label: 'Producer',
+            label: 'Size',
             required: true,
             errorAfterField: true,
             widget: widgets.multipleSelect(),
@@ -192,6 +193,7 @@ const productForm = (originCountries, regions, categories, producers, grapeVarie
         }),
         nose_attribute: fields.string({
             label: 'Description of nose attributes',
+            widget: widgets.textarea(),
             errorAfterField: true,
             validators: [
                 validators.maxlength(500, "Please enter a description shorter than 500 characters")
@@ -199,12 +201,13 @@ const productForm = (originCountries, regions, categories, producers, grapeVarie
         }),
         mouth_attribute: fields.string({
             label: 'Description of mouth attributes',
+            widget: widgets.textarea(),
             errorAfterField: true,
             validators: [
                 validators.maxlength(500, "Please enter a description shorter than 500 characters")
             ]
         }),
-        alcohol_pencentage: fields.string({
+        alcohol_percentage: fields.string({
             label: 'Alcohol Percentage',
             errorAfterField: true,
             validators: [ 
