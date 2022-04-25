@@ -35,6 +35,99 @@ router.get('/', async function (req, res) {
     res.render('product_related/index')
 })
 
+//CATEGORIES CRUD STARTS
+
+router.get('/category', async function (req, res) {
+    let categories = (await Category.fetchAll()).toJSON();
+
+    res.render('product_related/category/index', {
+        categories
+    })
+})
+
+router.get('/category/create', async function (req, res) {
+    const form = categoryForm();
+    res.render('product_related/category/create', {
+        'form': form.toHTML(bootstrapField)
+    })
+})
+
+router.post('/category/create', async (req, res) => {
+    const form = categoryForm();
+
+    form.handle(req, {
+        'success': async (form) => {
+            let { ...formData } = form.data
+
+            const category = new Category(formData);
+
+            await category.save()
+
+            req.flash("success_msg", `New category ${category.get('name')} has been created`)
+
+            res.redirect('/product-related/category');
+        },
+        'error': async (form) => {
+            res.render('product_related/category/create', {
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+router.get('/category/:category_id/update', async function (req, res) {
+    const category = await productDAL.getCategoryById(req.params.category_id);
+
+    const form = categoryForm();
+    form.fields.name.value = category.get('name')
+
+    res.render('product_related/category/update', {
+        form: form.toHTML(bootstrapField),
+        category: category.toJSON()
+    })
+})
+
+router.post('/category/:category_id/update', async function (req, res) {
+    const category = await productDAL.getCategoryById(req.params.category_id);
+
+    const form = categoryForm();
+
+    form.handle(req, {
+        'success': async (form) => {
+            let { ...formData } = form.data;
+
+            category.set(formData);
+            await category.save();
+
+            req.flash("success_msg", `Category ${category.get('name')} has been updated`)
+
+            res.redirect('/product-related/category');
+        },
+        'error': async (form) => {
+            res.render('product_related/category/update', {
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+router.get('/category/:category_id/delete', async function (req, res) {
+    const category = await productDAL.getCategoryById(req.params.category_id);
+    res.render('product_related/category/delete', {
+        category: category.toJSON()
+    })
+})
+
+router.post('/category/:category_id/delete', async function (req, res) {
+    const category = await productDAL.getCategoryById(req.params.category_id);
+    await category.destroy();
+    req.flash("success_msg", `Category ${category.get('name')} has been deleted`)
+    res.redirect('/product-related/category')
+})
+
+//CATEGORIES CRUD ENDS
+
+
 //SIZES CRUD STARTS
 
 router.get('/size', async function (req, res) {
@@ -513,4 +606,4 @@ router.post('/producer/:producer_id/delete', async function (req, res) {
 
 
 
-module.exports = router;
+module.exports = router

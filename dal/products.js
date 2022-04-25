@@ -15,6 +15,12 @@ async function getAllCategories() {
     return allCategories
 }
 
+async function getCategoryById(categoryId) {
+    return await Category.where({
+        'id': categoryId
+    }).fetch()
+}
+
 async function getAllCountries() {
     const allCountries = await OriginCountry.fetchAll().map( 
         country => [country.get('id'), country.get('name')]
@@ -88,7 +94,8 @@ async function getAllProducts() {
 
 
 module.exports = {
-    getAllCategories, 
+    getAllCategories,
+    getCategoryById,
     getAllCountries,
     getCountryByID,
     getAllRegions,
