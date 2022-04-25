@@ -50,9 +50,11 @@ const Product = bookshelf.model('Product', {
     sizes() {
         return this.belongsToMany('Size');
     }
-    
-
 });
+
+const User = bookshelf.model('User',{
+    tableName: 'user'
+})
 
 
 module.exports = { 
@@ -62,5 +64,6 @@ module.exports = {
     Producer,
     Size,
     GrapeVarietal,
-    Product
+    Product,
+    User
 };

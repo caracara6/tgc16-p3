@@ -42,7 +42,7 @@ exports.up = function(db) {
       length: 64,
 	  notNull: true
     }, 
-    user_type:{
+    user_type_id:{
       type: "int",
       notNull: true,
       unsigned: true,
