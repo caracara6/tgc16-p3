@@ -441,6 +441,8 @@ router.post('/producer/create', async (req, res) => {
 
             await producer.save()
 
+            req.flash("success_msg", `New wine producer ${producer.get('name')} has been created`)
+
             res.redirect('/product-related/producer');
         },
         'error': async (form) => {
@@ -449,6 +451,61 @@ router.post('/producer/create', async (req, res) => {
             })
         }
     })
+})
+
+router.get('/producer/:producer_id/update', async function (req, res) {
+    const producer = await productDAL.getProducerById(req.params.producer_id);
+
+    const form = producerForm();
+    form.fields.name.value = producer.get('name')
+    form.fields.description.value = producer.get('description')
+    form.fields.producer_image_url.value = producer.get('producer_image_url')
+
+    res.render('product_related/producer/update', {
+        form: form.toHTML(bootstrapField),
+        producer: producer.toJSON(),
+        'cloudinaryName': process.env.CLOUDINARY_NAME,
+        'cloudinaryApiKey': process.env.CLOUDINARY_API_KEY,
+        'cloudinaryPreset': process.env.CLOUDINARY_UPLOAD_PRESET
+    })
+})
+
+router.post('/producer/:producer_id/update', async function (req, res) {
+    const producer = await productDAL.getProducerById(req.params.producer_id);
+
+    const form = producerForm();
+
+    form.handle(req, {
+        'success': async (form) => {
+            let { ...formData } = form.data;
+
+            producer.set(formData);
+            await producer.save();
+
+            req.flash("success_msg", `Wine producer ${producer.get('name')} has been updated`)
+
+            res.redirect('/product-related/producer');
+        },
+        'error': async (form) => {
+            res.render('product_related/region/update', {
+                'form': form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+router.get('/producer/:producer_id/delete', async function (req, res) {
+    const producer = await productDAL.getProducerById(req.params.producer_id);
+    res.render('product_related/producer/delete', {
+        producer: producer.toJSON()
+    })
+})
+
+router.post('/producer/:producer_id/delete', async function (req, res) {
+    const producer = await productDAL.getProducerById(req.params.producer_id);
+    await producer.destroy();
+    req.flash("success_msg", `Wine producer ${producer.get('name')} has been deleted`)
+    res.redirect('/product-related/producer')
 })
 
 //PRODUCER CRUD ENDS

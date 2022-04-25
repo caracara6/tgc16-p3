@@ -48,6 +48,12 @@ async function getAllProducers() {
     return allProducers
 }
 
+async function getProducerById(producerId) {
+    return await Producer.where({
+        'id': producerId
+    }).fetch()
+}
+
 async function getAllSizes() {
     const allSizes = await Size.fetchAll().map( 
         size => [size.get('id'), size.get('name')]
@@ -88,6 +94,7 @@ module.exports = {
     getAllRegions,
     getRegionByID,
     getAllProducers,
+    getProducerById,
     getAllSizes,
     getSizeByID,
     getAllGrapeVarietals,
