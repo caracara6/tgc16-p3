@@ -19,12 +19,12 @@
     </tr>
   </thead>
   <tbody>
-    {{#each sizes}}
+    {{#each producers}}
     <tr>
         <td>{{this.id}}</td>
         <td>{{this.name}}</td>
         <td>{{this.description}}</td>
-        <td>{{this.image_url}}</td>
+        <td><img src="{{this.producer_image_url}}" class="img-fluid"/></td>
         <td>
             <a class="btn btn-primary btn-sm" href="/product-related/producer/{{this.id}}/update">Update</a>
             <a class="btn btn-danger btn-sm" href="/product-related/producer/{{this.id}}/delete">Delete</a>

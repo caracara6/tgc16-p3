@@ -423,7 +423,10 @@ router.get('/producer', async function (req, res) {
 router.get('/producer/create', async function (req, res) {
     const form = producerForm();
     res.render('product_related/producer/create', {
-        'form': form.toHTML(bootstrapField)
+        'form': form.toHTML(bootstrapField),
+        'cloudinaryName': process.env.CLOUDINARY_NAME,
+        'cloudinaryApiKey': process.env.CLOUDINARY_API_KEY,
+        'cloudinaryPreset': process.env.CLOUDINARY_UPLOAD_PRESET
     })
 })
 
@@ -442,10 +445,7 @@ router.post('/producer/create', async (req, res) => {
         },
         'error': async (form) => {
             res.render('product_related/producer/create', {
-                'form': form.toHTML(bootstrapField),
-                'cloudinaryName': process.env.CLOUDINARY_NAME,
-                'cloudinaryApiKey': process.env.CLOUDINARY_API_KEY,
-                'cloudinaryPreset': process.env.CLOUDINARY_UPLOAD_PRESET
+                'form': form.toHTML(bootstrapField)
             })
         }
     })
