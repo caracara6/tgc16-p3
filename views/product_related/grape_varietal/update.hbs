@@ -5,6 +5,7 @@
 
     <h3>Updating name of grape varietal: {{grapeVarietal.name}}</h3>
     <form method="POST">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
 
     {{{form}}}
 

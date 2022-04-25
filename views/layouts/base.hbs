@@ -25,11 +25,28 @@
                     <a class="nav-link" aria-current="page" href="/product-related">Product Domain</a>
                     <a class="nav-link" href="#">Features</a>
                     <a class="nav-link" href="#">Pricing</a>
-                    
+
                 </div>
             </div>
         </div>
     </nav>
+
+    {{#if success_msg }}
+    {{#each success_msg}}
+    <div class="alert alert-success">
+        {{this}}
+    </div>
+    {{/each}}
+    {{/if}}
+
+    {{#if err_msg }}
+    {{#each err_msg }}
+    <div class="alert alert-danger">
+        {{this}}
+    </div>
+    {{/each}}
+
+    {{/if}}
 
 
     {{#block "content"}}{{/block}}
@@ -37,7 +54,8 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
 
-
+    {{#block 'js'}}
+    {{/block}}
 </body>
 
 </html>

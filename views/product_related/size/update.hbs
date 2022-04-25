@@ -5,6 +5,7 @@
 
     <h3>Updating {{size.name}} bottle size</h3>
     <form method="POST">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
 
         {{{form}}}
 

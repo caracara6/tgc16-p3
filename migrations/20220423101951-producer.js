@@ -32,7 +32,7 @@ exports.up = function (db) {
         type: "string", 
         length: 1000
       },
-      image_url: { 
+      producer_image_url: { 
         type: "string", 
         length: 500
       }

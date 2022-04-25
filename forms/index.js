@@ -119,9 +119,10 @@ const producerForm = () => {
         description: fields.string({
             label: 'Winery Description',
             errorAfterField: true,
+            widget: widgets.textarea(),
             validators: [validators.maxlength(1000, "Please enter a description shorter than 1000 characters")]
         }),
-        image_url: fields.string({
+        producer_image_url: fields.string({
             label: 'Winery Image',
             widget: widgets.hidden()
         }),
