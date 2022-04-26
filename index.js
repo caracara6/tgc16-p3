@@ -40,7 +40,7 @@ app.use(flash());
 
 app.use(function(req,res,next){
     res.locals.success_msg = req.flash("success_msg");
-    res.locals.err_msg = req.flash('err_msg');
+    res.locals.err_msg = req.flash("err_msg");
     next();    
 })
 
@@ -59,6 +59,11 @@ app.use((err, req, res, next)=>{
     } else {
         next()
     }
+})
+
+app.use(function(req,res,next){
+    res.locals.user = req.session.user;
+    next();
 })
 
 const routes = {

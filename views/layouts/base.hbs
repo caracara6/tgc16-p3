@@ -26,6 +26,21 @@
                     <a class="nav-link" href="#">Features</a>
                     <a class="nav-link" href="#">Pricing</a>
 
+                    <div>
+                        {{#if user}}
+                        Hi, {{user.first_name}}
+                        <a href="/user/profile" class="btn btn-sm btn-success">
+                            Your Profile
+                        </a>
+                        <a href="/user/logout" class="btn btn-sm btn-danger">
+                            Logout</a>
+                        {{else}}
+                        Welcome, guest
+                        <a href="/user/login" class="btn btn-primary btn-sm mx-3">Login</a>
+                        <a href="/user/register" class="btn btn-primary btn-sm">Register</a>
+                        {{/if}}
+                    </div>
+
                 </div>
             </div>
         </div>

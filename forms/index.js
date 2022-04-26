@@ -307,5 +307,6 @@ module.exports = {
     sizeForm,
     producerForm,
     productForm,
+    registrationForm,
     loginForm
 }

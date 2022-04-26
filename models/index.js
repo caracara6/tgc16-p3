@@ -53,7 +53,14 @@ const Product = bookshelf.model('Product', {
 });
 
 const User = bookshelf.model('User',{
-    tableName: 'user'
+    tableName: 'user',
+    user_type() {
+        return this.belongsTo('UserType')
+    }
+})
+
+const UserType = bookshelf.model('UserType',{
+    tableName: 'user_type'
 })
 
 
@@ -65,5 +72,6 @@ module.exports = {
     Size,
     GrapeVarietal,
     Product,
-    User
+    User,
+    UserType
 };
