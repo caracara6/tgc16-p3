@@ -32,22 +32,22 @@ const GrapeVarietal = bookshelf.model('GrapeVarietal', {
 
 const Product = bookshelf.model('Product', {
     tableName:'product',
-    category() {
+    category: function() {
         return this.belongsTo('Category')
     },
-    origin_country() {
+    origin_country : function() {
         return this.belongsTo('OriginCountry')
     },
-    region() {
+    region: function() {
         return this.belongsTo('Region')
     },
-    producer() {
+    producer: function() {
         return this.belongsTo('Producer')
     },
-    grape_varietals() {
+    grape_varietals: function() {
         return this.belongsToMany('GrapeVarietal');
     },
-    sizes() {
+    sizes: function() {
         return this.belongsToMany('Size');
     }
 });
@@ -63,6 +63,44 @@ const UserType = bookshelf.model('UserType',{
     tableName: 'user_type'
 })
 
+const Order = bookshelf.model('Order',{
+    tableName: 'order',
+    user: function() {
+        return this.belongsTo('User')
+    },
+    order_status: function() {
+        return this.belongsTo('OrderStatus')
+    },
+    order_breakdown: function() {
+        return this.hasMany('OrderBreakdown')
+    }
+})
+
+const OrderBreakdown = bookshelf.model('OrderBreakdown', {
+    tableName: 'order_breakdown',
+    order: function() {
+        return this.belongsTo('Order')
+    },
+    user: function () {
+        return this.belongsTo("User");
+    }
+})
+
+
+const OrderStatus = bookshelf.model('OrderStatus',{
+    tableName: 'order_status'
+})
+
+const CartItem = bookshelf.model('CartItem', {
+    tableName: 'cart_item',
+    product:function(){
+        return this.belongsTo('Product')
+    },
+    user:function(){
+        return this.belongsTo('User');
+    }
+})
+
 
 module.exports = { 
     Category,
@@ -73,5 +111,9 @@ module.exports = {
     GrapeVarietal,
     Product,
     User,
-    UserType
+    UserType,
+    Order,
+    OrderBreakdown,
+    OrderStatus,
+    CartItem
 };

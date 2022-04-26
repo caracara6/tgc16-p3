@@ -31,7 +31,7 @@ app.use(
 
 app.use(session({
     'store': new FileStore(),
-    'secret': 'keyboard cat',
+    'secret': process.env.SESSION_SECRET_KEY,
     'resave': false,
     'saveUninitialized': true
 }))
@@ -74,9 +74,11 @@ const routes = {
 
 }
 
+const { checkIfAuthorised } = require('./middlewares');
+
 async function main() {
 	app.use("/", routes.landingRoutes);
-	app.use("/product-related", routes.productRoutes);
+	app.use("/product-related", checkIfAuthorised, routes.productRoutes);
     app.use('/cloudinary', routes.cloudinaryRoutes);
     app.use('/user', routes.userRoutes)
 
