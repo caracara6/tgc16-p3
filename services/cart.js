@@ -39,10 +39,13 @@ class CartServices {
 
     async updateQuantity(productId, newQuantity) {
         let product = await productDAL.getProductById(productId)
-        let cartItem = await cartDAL.getCartItemByUserAndProduct(this.userId, productId)
+        // let cartItem = await cartDAL.getCartItemByUserAndProduct(this.userId, productId)
 
-        if(product.get('stock') >= cartItem.get('quantity') + newQuantity) {
+        if(product.get('stock') >= newQuantity) {
             await cartDAL.updateCartItemQuantity(this.userId, productId, newQuantity);
+            return true
+        } else {
+            return false
         }
     }
 
