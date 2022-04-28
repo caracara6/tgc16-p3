@@ -9,6 +9,8 @@ const FileStore = require('session-file-store')(session);
 
 const csrf = require('csurf');
 
+const cors = require('cors')
+
 // create an instance of express app
 const app = express();
 
@@ -28,6 +30,8 @@ app.use(
 		extended: false
 	})
 );
+
+app.use(cors());
 
 app.use(session({
     'store': new FileStore(),
