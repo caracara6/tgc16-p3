@@ -87,13 +87,23 @@ async function getGrapeVarietalByID(grapeVarietalId) {
 }
 
 async function getAllProducts() {
-    return await Product.fetchAll();
+    return await Product.collection().fetch({
+        withRelated: [
+            'category', 
+            'origin_country', 
+            'region', 
+            'producer', 
+            'grape_varietals', 
+            'sizes'
+        ]
+    });
 }
 
 async function getProductById(productId) {
 
     return await Product.where({
-        'id': productId
+        'id': productId,
+        
     }).fetch({
         'require': true, 
         'withRelated': [

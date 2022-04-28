@@ -45,7 +45,16 @@ app.use(function(req,res,next){
 })
 
 //CSRF
-app.use(csrf());
+const csurfInstance = csrf();
+app.use(function(req,res,next){
+
+    if (req.url === '/checkout/process_payment' || 
+        req.url.slice(0,5)=='/api/') {
+        next();
+    } else {
+        csurfInstance(req,res,next);
+    }
+})
 
 app.use(function(req,res,next){
     res.locals.csrfToken = req.csrfToken();
@@ -66,7 +75,7 @@ app.use(function(req,res,next){
     next();
 })
 
-const routes = {
+const http = {
 	landingRoutes: require('./routes/landing'),
 	productRoutes: require('./routes/products'),
     userRoutes: require('./routes/users'),
@@ -74,13 +83,24 @@ const routes = {
 
 }
 
+const api = {
+    userRoutes : require('./routes/api/users'),
+    productRoutes: require('./routes/api/products'),
+    cartRoutes: require('./routes/api/cart')
+}
+
+
+
 const { checkIfAuthorised } = require('./middlewares');
 
 async function main() {
-	app.use("/", routes.landingRoutes);
-	app.use("/product-related", checkIfAuthorised, routes.productRoutes);
-    app.use('/cloudinary', routes.cloudinaryRoutes);
-    app.use('/user', routes.userRoutes)
+	app.use("/", http.landingRoutes);
+	app.use("/product-related", checkIfAuthorised, http.productRoutes);
+    app.use('/cloudinary', http.cloudinaryRoutes);
+    app.use('/user', http.userRoutes)
+    app.use('/api/user', express.json(), api.userRoutes);
+    app.use('/api/product-related', express.json(), api.productRoutes);
+    app.use('/api/cart', express.json(), api.cartRoutes);
 
 }
 

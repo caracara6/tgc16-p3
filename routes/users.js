@@ -76,7 +76,6 @@ router.post('/login', (req, res) => {
             })
 
 
-
             if (!user) {
                 console.log(1)
                 req.flash('err_msg', "Sorry, your login details are wrong")
