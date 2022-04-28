@@ -81,8 +81,8 @@ const OrderBreakdown = bookshelf.model('OrderBreakdown', {
     order: function() {
         return this.belongsTo('Order')
     },
-    user: function () {
-        return this.belongsTo("User");
+    product: function () {
+        return this.belongsTo("Product");
     }
 })
 
