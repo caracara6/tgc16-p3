@@ -90,7 +90,8 @@ const http = {
 const api = {
     userRoutes : require('./routes/api/users'),
     productRoutes: require('./routes/api/products'),
-    cartRoutes: require('./routes/api/cart')
+    cartRoutes: require('./routes/api/cart'),
+    checkoutRoutes: require('./routes/api/checkout')
 }
 
 
@@ -105,6 +106,7 @@ async function main() {
     app.use('/api/user', express.json(), api.userRoutes);
     app.use('/api/product-related', express.json(), api.productRoutes);
     app.use('/api/cart', express.json(), api.cartRoutes);
+    app.use('/api/checkout', express.json(), api.checkoutRoutes);
 
 }
 

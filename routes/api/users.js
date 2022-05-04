@@ -120,7 +120,6 @@ router.post('/refresh', async function(req,res){
     })
 })
 
-//not working
 router.get('/profile', checkIfAuthenticatedJWT, function(req,res) {
     console.log(req.user)
     res.send({

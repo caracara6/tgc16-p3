@@ -27,10 +27,14 @@ exports.up = function (db) {
 			unsigned: true,
 			notNull: true
 		},
-		shipping_amount: {
-			type: "int",
-			unsigned: true,
-		},
+		// shipping_amount: {
+		// 	type: "int",
+		// 	unsigned: true,
+		// },
+		payment_reference: {
+			type: 'text',
+			notNull: true
+		  },
 		order_status_id: {
 			type: "int",
 			unsigned: true,
@@ -58,6 +62,15 @@ exports.up = function (db) {
 					onUpdate: "RESTRICT",
 				},
 			},
+		},
+		notes: {
+			type: 'string',
+			length: '500'
+		},
+		shippping_address: {
+			type: "string",
+			length: 500,
+			notNull: true
 		},
 		date_placed: {
 			type: "datetime",

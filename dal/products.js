@@ -9,7 +9,7 @@ const {
 } = require('../models');
 
 async function getAllCategories() {
-    const allCategories = await Category.fetchAll().map( 
+    const allCategories = await Category.fetchAll().map(
         category => [category.get('id'), category.get('name')]
     )
     return allCategories
@@ -22,7 +22,7 @@ async function getCategoryById(categoryId) {
 }
 
 async function getAllCountries() {
-    const allCountries = await OriginCountry.fetchAll().map( 
+    const allCountries = await OriginCountry.fetchAll().map(
         country => [country.get('id'), country.get('name')]
     )
     return allCountries
@@ -35,7 +35,7 @@ async function getCountryByID(sizeId) {
 }
 
 async function getAllRegions() {
-    const allRegions = await Region.fetchAll().map( 
+    const allRegions = await Region.fetchAll().map(
         region => [region.get('id'), region.get('name')]
     )
     return allRegions
@@ -48,7 +48,7 @@ async function getRegionByID(regionId) {
 }
 
 async function getAllProducers() {
-    const allProducers = await Producer.fetchAll().map( 
+    const allProducers = await Producer.fetchAll().map(
         producer => [producer.get('id'), producer.get('name')]
     )
     return allProducers
@@ -61,7 +61,7 @@ async function getProducerById(producerId) {
 }
 
 async function getAllSizes() {
-    const allSizes = await Size.fetchAll().map( 
+    const allSizes = await Size.fetchAll().map(
         size => [size.get('id'), size.get('name')]
     )
     return allSizes
@@ -74,7 +74,7 @@ async function getSizeByID(sizeId) {
 }
 
 async function getAllGrapeVarietals() {
-    const allGrapeVarietals = await GrapeVarietal.fetchAll().map( 
+    const allGrapeVarietals = await GrapeVarietal.fetchAll().map(
         grape => [grape.get('id'), grape.get('name')]
     )
     return allGrapeVarietals
@@ -86,14 +86,41 @@ async function getGrapeVarietalByID(grapeVarietalId) {
     }).fetch()
 }
 
-async function getAllProducts() {
-    return await Product.collection().fetch({
+async function getAllProducts(query) {
+
+    let q = Product.collection();
+
+    if (query.categoryFilter) {
+        q.where('category_id', '=', query.categoryFilter)
+    }
+
+    //what if select more than one country??
+    if (query.countryFilter) {
+        q.where('origin_country_id', '=', query.countryFilter)
+    }
+
+    
+
+    //how to find by description, producer name, region etc too?
+    // how to find by and / or for e.g. white wine and from france
+    if (query.searchInput) {
+        q.where('name', 'like', '%' + query.searchInput + '%')
+    }
+
+    if(query.grapeVarietalFilter) {
+        let selectedGrapeVarietals = query.grapeVarietalFilter.split(',');
+
+        q.query('join', 'grape_varietal_product', 'product.id', 'product_id')
+        .where('grape_varietal_id', 'in', selectedGrapeVarietals)
+    }
+
+    return await q.fetch({
         withRelated: [
-            'category', 
-            'origin_country', 
-            'region', 
-            'producer', 
-            'grape_varietals', 
+            'category',
+            'origin_country',
+            'region',
+            'producer',
+            'grape_varietals',
             'sizes'
         ]
     });
@@ -103,17 +130,17 @@ async function getProductById(productId) {
 
     return await Product.where({
         'id': productId,
-        
+
     }).fetch({
-        'require': true, 
+        'require': true,
         'withRelated': [
-            'category', 
-            'origin_country', 
-            'region', 
-            'producer', 
-            'grape_varietals', 
+            'category',
+            'origin_country',
+            'region',
+            'producer',
+            'grape_varietals',
             'sizes'
-        ] 
+        ]
     });
 
 }

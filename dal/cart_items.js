@@ -12,7 +12,7 @@ async function getCart(userId){
     })
 }
 
-//specific item in cart of specific
+//specific item in cart of specific user
 async function getCartItemByUserAndProduct(userId, productId) {
     return await CartItem.where({
         'user_id': userId,

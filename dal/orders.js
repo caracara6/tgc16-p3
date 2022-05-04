@@ -31,13 +31,41 @@ async function getAllOrders() {
     })
 }
 
-async function createOrderBreakdown(orderId, productId, quantity){
+async function createOrderBreakdown(orderId, orderData){
     let orderBreakdown = new OrderBreakdown({
         order_id: orderId,
-        product_id: productId,
-        quantity
+        product_id: orderData.productId,
+        quantity: orderData.quantity
     })
     return await orderBreakdown.save()
+}
+
+async function createOrder(orderData) {
+
+    const newOrder = new Order({
+        // shipping_amount: 2000,
+        total_amount: orderData.total_amount,
+        payment_reference: orderData.payment_reference,
+        order_status_id: 2,
+        user_id: orderData.user_id,
+        // notes: orderData.notes,
+        date_placed: new Date().toISOString(),
+        date_updated: new Date().toISOString()
+    });
+
+    await newOrder.save();
+
+    //stock decrement here?
+    // orderData.items.map( async item => {
+
+    // })
+
+    let newOrderId = newOrder.get("id")
+
+    return newOrderId;
+
+    
+
 }
 
 module.exports = { 
@@ -45,5 +73,6 @@ module.exports = {
     getAllOrdersByUser,
     getSpecificOrderByUser,
     getAllOrders,
-    createOrderBreakdown
+    createOrderBreakdown,
+    createOrder
  }
