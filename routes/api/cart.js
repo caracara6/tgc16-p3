@@ -32,7 +32,7 @@ router.post('/:product_id', checkIfAuthenticatedJWT, async function(req, res) {
         res.status(200).send({ "message" : valResult })
 
     } catch (e) {
-        res.status(500).send({"message" : "Unable to add to your cart due to internal server error"})
+        res.status(500).send({"message" : e})
     }
 })
 
