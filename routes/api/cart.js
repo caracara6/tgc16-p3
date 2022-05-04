@@ -24,7 +24,7 @@ router.get('/', checkIfAuthenticatedJWT, async function (req, res) {
 })
 
 // have to log in for this route to work
-router.post('/:product_id', checkIfAuthenticatedJWT, async function(req, res) {
+router.get('/:product_id', checkIfAuthenticatedJWT, async function(req, res) {
     try {
         let cartServices = new CartServices(req.user.id)
         console.log(req.user.id)
