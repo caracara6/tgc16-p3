@@ -26,7 +26,7 @@ async function createCartItem(userId, productId, quantity) {
 
     let cartItem = new CartItem({
         'user_id': userId,
-        'product_Id': productId,
+        'product_id': productId,
         'quantity': quantity
     });
 
