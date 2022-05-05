@@ -18,10 +18,13 @@ async function createOrder(stripeSessionEvent) {
     let orderData = {
         total_amount: stripeSessionEvent.amount_total,
         payment_reference: stripeSessionEvent.payment_intent,
-        user_id: stripeSessionEvent.client_reference_id,
+        user_id: stripeSessionEvent.customer_reference_id,
         shipping_address: shippingAddress,
         // items: []
     }
+
+    let newOrderId = orderDAL.createOrder(orderData)
+    //need to set the newOrderId for each orderbreakdown
 
     let orderMetadata = JSON.parse(stripeSessionEvent.metadata.orders);
     // orderMetadata.map( order => {
@@ -29,6 +32,8 @@ async function createOrder(stripeSessionEvent) {
 
     //     })
     // })
+
+    //create orderbreakdown for each ordered item here
 
 }
 

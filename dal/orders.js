@@ -48,9 +48,10 @@ async function createOrder(orderData) {
         payment_reference: orderData.payment_reference,
         order_status_id: 2,
         user_id: orderData.user_id,
+        shipping_address: orderData.shipping_address,
         // notes: orderData.notes,
-        date_placed: new Date().toISOString(),
-        date_updated: new Date().toISOString()
+        date_placed: new Date(),
+        date_updated: new Date()
     });
 
     await newOrder.save();
@@ -63,8 +64,6 @@ async function createOrder(orderData) {
     let newOrderId = newOrder.get("id")
 
     return newOrderId;
-
-    
 
 }
 

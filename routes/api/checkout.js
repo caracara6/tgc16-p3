@@ -48,7 +48,11 @@ router.get('/', checkIfAuthenticatedJWT, async function(req, res){
     }
     console.log(lineItems)
     const payment = {
+        customer_reference_id: req.user.id,
         payment_method_types: ['card'],
+        shipping_address_collection: {
+            allowed_countries: ['SG'],
+        },
         line_items: lineItems,
         success_url: process.env.STRIPE_SUCCESS_URL,
         cancel_url: process.env.STRIPE_CANCELLED_URL,
@@ -68,6 +72,21 @@ router.get('/', checkIfAuthenticatedJWT, async function(req, res){
 
 router.post('/process_payment', express.raw({type: 'application/json'}), async (req, res) => {
     let payload = req.body;
+    let endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
+    let sigHeader = req.headers["stripe-signature"];
+    let event;
+    try {
+        event = stripe.webhooks.constructEvent(payload, sigHeader, endpointSecret);
+        console.log(event)
+        if (event.type ==  "checkout.session.completed") {
+            let stripeEvent = event.data.object;
+
+        }
+    } catch(e) {
+        res.send({
+            "error": e.message
+        })
+    }
 })
 
 

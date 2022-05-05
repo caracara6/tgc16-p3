@@ -87,8 +87,10 @@ async function getGrapeVarietalByID(grapeVarietalId) {
 }
 
 async function getAllProducts(query) {
-
+// 
     let q = Product.collection();
+
+    // let q = Product.query
 
     if (query.categoryFilter) {
         q.where('category_id', '=', query.categoryFilter)
@@ -104,7 +106,7 @@ async function getAllProducts(query) {
     //how to find by description, producer name, region etc too?
     // how to find by and / or for e.g. white wine and from france
     if (query.searchInput) {
-        q.where('name', 'like', '%' + query.searchInput + '%')
+        q.orWhere('name', 'like', '%' + query.searchInput + '%').orWhere('description', 'like', '%' + query.searchInput + '%')
     }
 
     if(query.grapeVarietalFilter) {

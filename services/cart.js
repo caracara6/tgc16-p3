@@ -16,6 +16,7 @@ class CartServices {
 
         let cartItem = await cartDAL.getCartItemByUserAndProduct(this.userId, productId)
 
+        // product already in user's cart, and sufficient stock
         if(cartItem && currentStock >= cartItem.get('quantity') + quantity) {
             await cartDAL.updateCartItemQuantity(
                 this.userId,
@@ -23,11 +24,13 @@ class CartServices {
                 cartItem.get('quantity') + quantity
                 )
             return "You have added this item to your cart successfully"
-        } else if (cartItem && currentStock < cartItem.get('quantity') + quantity) {
-            // what to return if not enough stock to add to cart??
 
+            //product already in user's cart but insufficient stock
+        } else if (cartItem && currentStock < cartItem.get('quantity') + quantity) {
+            
             return `Only ${currentStock} of this item left`
 
+            //product not yet already in user's cart, and sufficient stock
         } else if (!cartItem && currentStock >= quantity) {
             cartItem = await cartDAL.createCartItem(
                 this.userId,
@@ -35,6 +38,8 @@ class CartServices {
                 quantity
             )
             return "You have added this item to your cart succesfully";
+            
+            //product not yet in user's cart and insufficient stock
         } else if( !cartItem && currentStock == 0) {
             return "This item is currently out of stock"
         }
