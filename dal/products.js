@@ -106,7 +106,8 @@ async function getAllProducts(query) {
     //how to find by description, producer name, region etc too?
     // how to find by and / or for e.g. white wine and from france
     if (query.searchInput) {
-        q.orWhere('name', 'like', '%' + query.searchInput + '%').orWhere('description', 'like', '%' + query.searchInput + '%')
+        console.log(query.searchInput)
+        q.where('name', 'like', '%' + query.searchInput + '%')
     }
 
     if(query.grapeVarietalFilter) {
