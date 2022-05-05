@@ -19,29 +19,39 @@ class CartServices {
 
         // product already in user's cart, and sufficient stock
         if(cartItem && currentStock >= cartItem.get('quantity') + quantity) {
+            console.log('1')
             await cartDAL.updateCartItemQuantity(
                 this.userId,
                 productId, 
                 cartItem.get('quantity') + quantity
                 )
+            console.log('1')
+
             return "You have added this item to your cart successfully"
 
             //product already in user's cart but insufficient stock
         } else if (cartItem && currentStock < cartItem.get('quantity') + quantity) {
-            
+            console.log('2')
+
             return `Only ${currentStock} of this item left`
 
             //product not yet already in user's cart, and sufficient stock
         } else if (!cartItem && currentStock >= quantity) {
+            console.log('3')
+
             cartItem = await cartDAL.createCartItem(
                 this.userId,
                 productId,
                 quantity
             )
+            console.log('3')
+
             return "You have added this item to your cart succesfully";
             
             //product not yet in user's cart and insufficient stock
         } else if( !cartItem && currentStock == 0) {
+            console.log('4')
+
             return "This item is currently out of stock"
         }
     }
