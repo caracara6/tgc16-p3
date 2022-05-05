@@ -11,9 +11,10 @@ class CartServices {
     }
 
     async addToCart(productId, quantity) {
+        console.log(this.userId)
         let product = await productDAL.getProductById(productId)
         let currentStock = product.get('stock')
-
+        console.log(product)
         let cartItem = await cartDAL.getCartItemByUserAndProduct(this.userId, productId)
 
         // product already in user's cart, and sufficient stock
