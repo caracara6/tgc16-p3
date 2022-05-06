@@ -48,7 +48,9 @@ router.get('/', checkIfAuthenticatedJWT, async function(req, res){
             quantity: item.get('quantity')
         })
     }
+
     console.log('meta =>', JSON.stringify(meta))
+
     const payment = {
         client_reference_id: req.user.id,
         payment_method_types: ['card'],
@@ -65,6 +67,8 @@ router.get('/', checkIfAuthenticatedJWT, async function(req, res){
 
 
     let stripeSession = await Stripe.checkout.sessions.create(payment)
+
+    console.log(stripeSession)
 
     res.status(200).send({
         sessionId: stripeSession.id,
