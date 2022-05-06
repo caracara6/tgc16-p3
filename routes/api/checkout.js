@@ -15,6 +15,8 @@ router.get('/', checkIfAuthenticatedJWT, async function(req, res){
 
     let items = await cartServices.getCart();
 
+    console.log(items)
+
     if(items.length == 0){
         return res.status(400).send({"message":"Your cart is empty"})
     }
@@ -48,7 +50,7 @@ router.get('/', checkIfAuthenticatedJWT, async function(req, res){
     }
     console.log(lineItems)
     const payment = {
-        customer_reference_id: req.user.id,
+        client_reference_id: req.user.id,
         payment_method_types: ['card'],
         shipping_address_collection: {
             allowed_countries: ['SG'],
@@ -81,12 +83,22 @@ router.post('/process_payment', express.raw({type: 'application/json'}), async (
         if (event.type ==  "checkout.session.completed") {
             let stripeEvent = event.data.object;
 
+            console.log('checkout completed =>', stripeEvent)
+
         }
     } catch(e) {
         res.send({
             "error": e.message
         })
     }
+})
+
+router.get('/success', function (req, res) {
+    res.send({'message' : 'Your order has been confirmed'})
+})
+
+router.get('/cancelled', function (req, res) {
+    res.send({'message': 'Your order has been cancelled'})
 })
 
 

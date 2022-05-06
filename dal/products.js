@@ -87,10 +87,12 @@ async function getGrapeVarietalByID(grapeVarietalId) {
 }
 
 async function getAllProducts(query) {
-// 
+    // 
     let q = Product.collection();
 
     // let q = Product.query
+
+    console.log('query', query)
 
     if (query.categoryFilter) {
         q.where('category_id', '=', query.categoryFilter)
@@ -101,20 +103,26 @@ async function getAllProducts(query) {
         q.where('origin_country_id', '=', query.countryFilter)
     }
 
-    
+
 
     //how to find by description, producer name, region etc too?
     // how to find by and / or for e.g. white wine and from france
+    // if (query.searchInput) {
+    //     console.log(query.searchInput)
+    //     q.where('name', 'like', '%' + query.searchInput + '%')
+    // }
+
     if (query.searchInput) {
-        console.log(query.searchInput)
-        q.where('name', 'like', '%' + query.searchInput + '%')
+        q = q.query(qb => {
+            qb.where('name', 'ilike', '%' + query.searchInput + '%').orWhere('description', 'like', '%' + query.searchInput + '%')
+        })
     }
 
-    if(query.grapeVarietalFilter) {
+    if (query.grapeVarietalFilter) {
         let selectedGrapeVarietals = query.grapeVarietalFilter.split(',');
 
         q.query('join', 'grape_varietal_product', 'product.id', 'product_id')
-        .where('grape_varietal_id', 'in', selectedGrapeVarietals)
+            .where('grape_varietal_id', 'in', selectedGrapeVarietals)
     }
 
     return await q.fetch({
@@ -135,8 +143,8 @@ async function getProductById(productId) {
         'id': productId,
 
     }).fetch({
-        'require': true,
-        'withRelated': [
+        require: true,
+        withRelated: [
             'category',
             'origin_country',
             'region',

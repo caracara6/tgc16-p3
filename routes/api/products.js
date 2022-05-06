@@ -116,7 +116,7 @@ router.get('/products', async (req, res) => {
 
 router.get('/products/:product_id', async (req, res) => {
     try {
-
+        console.log(req.params.product_id)
         let product = await productDAL.getProductById(req.params.product_id)
 
         console.log(product.toJSON())
