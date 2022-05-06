@@ -48,7 +48,7 @@ router.get('/', checkIfAuthenticatedJWT, async function(req, res){
             quantity: item.get('quantity')
         })
     }
-    console.log(lineItems)
+    console.log('meta =>', JSON.stringify(meta))
     const payment = {
         client_reference_id: req.user.id,
         payment_method_types: ['card'],
