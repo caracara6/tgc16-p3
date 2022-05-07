@@ -122,10 +122,13 @@ router.post('/refresh', async function(req,res){
 
 router.get('/profile', checkIfAuthenticatedJWT, function(req,res) {
     console.log(req.user)
-    res.send({
-        'message':"Welcome " + req.user.first_name
-    })
-} )
+    res.send(
+        req.user
+    //     {
+    //     'message':"Welcome " + req.user.first_name
+    // }
+    )
+})
 
 router.post('/logout', async(req,res)=>{
     if (!req.body.refreshToken) {
