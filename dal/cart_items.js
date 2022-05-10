@@ -40,6 +40,7 @@ async function updateCartItemQuantity(userId, productId, quantity) {
     cartItem.set('quantity', quantity);
     
     await cartItem.save();
+    console.log(cartItem.toJSON())
     return cartItem;
 }
 

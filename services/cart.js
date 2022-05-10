@@ -11,8 +11,8 @@ class CartServices {
     }
 
     async addToCart(productId, quantity) {
-        console.log(this.userId)
-        let product = await productDAL.getProductById(productId)
+        console.log('testing 3')
+        let product = await productDAL.getProductById(parseInt(productId))
         let currentStock = product.get('stock')
         console.log(product)
         let cartItem = await cartDAL.getCartItemByUserAndProduct(this.userId, productId)
@@ -37,14 +37,14 @@ class CartServices {
 
             //product not yet already in user's cart, and sufficient stock
         } else if (!cartItem && currentStock >= quantity) {
-            console.log('3')
+            console.log('testing 3')
 
             cartItem = await cartDAL.createCartItem(
                 this.userId,
                 productId,
                 quantity
             )
-            console.log('3')
+            console.log('testing 3')
 
             return "You have added this item to your cart succesfully";
             
@@ -59,8 +59,9 @@ class CartServices {
     async updateQuantity(productId, newQuantity) {
         let product = await productDAL.getProductById(productId)
         // let cartItem = await cartDAL.getCartItemByUserAndProduct(this.userId, productId)
-
+        
         if(product.get('stock') >= newQuantity) {
+            
             await cartDAL.updateCartItemQuantity(this.userId, productId, newQuantity);
             return true
         } else {

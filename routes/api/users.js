@@ -132,11 +132,14 @@ router.get('/profile', checkIfAuthenticatedJWT, function(req,res) {
 
 router.post('/logout', async(req,res)=>{
     if (!req.body.refreshToken) {
+        console.log('1')
         res.sendStatus(401);
     } else {
         jwt.verify(req.body.refreshToken, process.env.REFRESH_TOKEN_SECRET,
             async function(err,payload){
                 if (err) {
+                    console.log(err)
+                    console.log('2')
                     return res.sendStatus(401);
                 } 
                 const token = new BlacklistedToken();

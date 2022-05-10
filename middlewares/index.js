@@ -18,10 +18,10 @@ const checkIfAuthenticatedJWT = function(req,res,next) {
     const authHeader = req.headers.authorization;
 
     if (authHeader) {
-        console.log('authHeader => ', authHeader)
+        // console.log('authHeader => ', authHeader)
         const token = authHeader.split(' ')[1];
 
-        console.log('token =>', token)
+        // console.log('access token =>', token)
 
         jwt.verify(token, process.env.TOKEN_SECRET, function(err, payload){
             if (err) {

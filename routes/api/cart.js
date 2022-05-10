@@ -6,17 +6,18 @@ const { checkIfAuthenticatedJWT } = require('../../middlewares');
 const CartServices = require('../../services/cart');
 
 router.get('/', checkIfAuthenticatedJWT, async function (req, res) {
+    
     try {
 
         let cartServices = new CartServices(req.user.id)
         let cartItems = await cartServices.getCart();
 
 
-        if(cartItems.toJSON().length == 0){
-            return res.status(200).send({"message":"Your cart is empty"})
-        } else {
+        // if(cartItems.toJSON().length == 0){
+        //     return res.status(200).send({"message":"Your cart is empty"})
+        // } else {
             res.status(200).send(cartItems)
-        }
+        // }
 
     } catch (e) {
         res.status(500).send({"message" : "Unable to retrieve your cart due to internal server error"})
@@ -27,9 +28,9 @@ router.get('/', checkIfAuthenticatedJWT, async function (req, res) {
 router.post('/:product_id', checkIfAuthenticatedJWT, async function(req, res) {
     try {
         let cartServices = new CartServices(req.user.id)
-        
-        let valResult = await cartServices.addToCart(req.params.product_id, 1)
-
+        console.log('testing req.params', typeof req.params.product_id)
+        let valResult = await cartServices.addToCart(req.params.product_id, parseInt(req.body.quantity))
+        console.log('testing add to cart 2')
         res.status(200).send({ "message" : valResult })
 
     } catch (e) {
@@ -42,18 +43,18 @@ router.put('/:product_id', checkIfAuthenticatedJWT, async function(req, res){
 
         let cartServices = new CartServices(req.user.id)
 
-        if(req.body.newQuantity == 0) {
+        if(parseInt(req.body.newQuantity) == 0) {
             await cartServices.removeFromCart(req.params.product_id);
             return res.status(200).send({"message":"You have removed this item from your cart"})
 
-        } else if (req.body.newQuantity > 0) {
-            let result = await cartServices.updateQuantity(req.params.product_id, req.body.newQuantity)
+        } else if (parseInt(req.body.newQuantity) > 0) {
+            let result = await cartServices.updateQuantity(req.params.product_id, parseInt(req.body.newQuantity))
             if(result){
                 return res.status(200).send({"message" : "Quantity changed successfully"})
             } else {
                 return res.status(400).send({"message":"There is not enough of this item in stock"})
             }
-        } else if(req.body.newQuantity<0){
+        } else if(parseInt(req.body.newQuantity) < 0){
             return res.status(400).send({"message": "Please enter a positive number"})
         }
 
