@@ -99,9 +99,9 @@ async function getAllProducts(query) {
     }
 
     //what if select more than one country??
-    if (query.countryFilter) {
-        q.where('origin_country_id', '=', query.countryFilter)
-    }
+    // if (query.countryFilter) {
+    //     q.where('origin_country_id', '=', query.countryFilter)
+    // }
 
 
 
@@ -114,16 +114,19 @@ async function getAllProducts(query) {
 
     if (query.searchInput) {
         q = q.query(qb => {
-            qb.where('name', 'ilike', '%' + query.searchInput + '%').orWhere('description', 'like', '%' + query.searchInput + '%')
+            qb.where('name', 'ilike', '%' + query.searchInput + '%')
+            .orWhere('description', 'ilike', '%' + query.searchInput + '%')
+            .orWhere('nose_attribute', 'ilike', '%' + query.searchInput + '%')
+            .orWhere('mouth_attribute', 'ilike', '%' + query.searchInput + '%')
         })
     }
 
-    if (query.grapeVarietalFilter) {
-        let selectedGrapeVarietals = query.grapeVarietalFilter.split(',');
+    // if (query.grapeVarietalFilter) {
+    //     let selectedGrapeVarietals = query.grapeVarietalFilter.split(',');
 
-        q.query('join', 'grape_varietal_product', 'product.id', 'product_id')
-            .where('grape_varietal_id', 'in', selectedGrapeVarietals)
-    }
+    //     q.query('join', 'grape_varietal_product', 'product.id', 'product_id')
+    //         .where('grape_varietal_id', 'in', selectedGrapeVarietals)
+    // }
 
     return await q.fetch({
         withRelated: [

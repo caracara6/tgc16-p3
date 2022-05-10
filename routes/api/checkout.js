@@ -8,6 +8,7 @@ const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 
 router.post('/', checkIfAuthenticatedJWT, async function(req, res){
+    
     const cartServices = new CartServices(req.user.id)
 
 

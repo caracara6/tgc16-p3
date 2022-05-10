@@ -79,6 +79,10 @@ router.post('/login', async (req, res) => {
                 accessToken,
                 refreshToken
             })
+        } else if (!user){
+            return res.status(400).send({
+                'error':"This email is not associated with this website"
+            })
         } else {
             return res.status(400).send({
                 'error':"Wrong email or password"
