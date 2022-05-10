@@ -7,7 +7,7 @@ const OrderServices = require('../../services/orders')
 const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 
-router.get('/', checkIfAuthenticatedJWT, async function(req, res){
+router.post('/', checkIfAuthenticatedJWT, async function(req, res){
     const cartServices = new CartServices(req.user.id)
 
     await cartServices.stockCheck();
@@ -58,8 +58,8 @@ router.get('/', checkIfAuthenticatedJWT, async function(req, res){
             allowed_countries: ['SG'],
         },
         line_items: lineItems,
-        success_url: process.env.STRIPE_SUCCESS_URL,
-        cancel_url: process.env.STRIPE_CANCELLED_URL,
+        success_url: process.env.CLIENT_BASE_URL + '/checkout-success',
+        cancel_url: process.env.CLIENT_BASE_URL,
         metadata: {
             orders: JSON.stringify(meta)
         }
@@ -70,11 +70,14 @@ router.get('/', checkIfAuthenticatedJWT, async function(req, res){
 
     console.log(stripeSession)
 
-    res.status(200).send({
-        sessionId: stripeSession.id,
-        publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-      });
+    // res.status(200).send({
+    //     sessionId: stripeSession.id,
+    //     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+    //   });
+
+    res.status(200).send({ url: stripeSession.url })
 })
+
 
 router.post('/process_payment', express.raw({type: 'application/json'}), async (req, res) => {
     let payload = req.body;
@@ -83,6 +86,7 @@ router.post('/process_payment', express.raw({type: 'application/json'}), async (
     let event;
     
     try {
+        
         event = stripe.webhooks.constructEvent(payload, sigHeader, endpointSecret);
         console.log(event)
         if (event.type ==  "checkout.session.completed") {

@@ -13,7 +13,7 @@
       "**/CVS": true
    },
    "files.autoSave": "afterDelay",
-   "workbench.colorTheme": "Default Dark+",
+   "workbench.colorTheme": "Quiet Light",
    "editor.defaultFormatter": "HookyQR.beautify",
    "[javascript]": {
       "editor.defaultFormatter": "vscode.typescript-language-features"
