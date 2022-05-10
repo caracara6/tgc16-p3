@@ -10,8 +10,6 @@ const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 router.post('/', checkIfAuthenticatedJWT, async function(req, res){
     const cartServices = new CartServices(req.user.id)
 
-    await cartServices.stockCheck();
-
 
     let items = await cartServices.getCart();
 
@@ -24,6 +22,7 @@ router.post('/', checkIfAuthenticatedJWT, async function(req, res){
     let insufficientStockItems = await cartServices.stockCheck()
 
     if(insufficientStockItems.length > 0){
+        //throw or return??
         return res.status(400).send(insufficientStockItems, {"message": "Some items in your cart are out of stock. Your cart has been updated"})
     }
 

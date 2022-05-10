@@ -33,6 +33,7 @@ const checkIfAuthenticatedJWT = function(req,res,next) {
             next();
         })
     } else {
+        console.log('status 403 2')
         res.sendStatus(403);
     }
 }
