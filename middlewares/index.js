@@ -17,6 +17,10 @@ const checkIfAuthorised = (req, res, next) => {
 const checkIfAuthenticatedJWT = function(req,res,next) {
     const authHeader = req.headers.authorization;
 
+    console.log('req.headers', req.headers)
+
+    console.log('authHeader', authHeader)
+
     if (authHeader) {
         // console.log('authHeader => ', authHeader)
         const token = authHeader.split(' ')[1];
