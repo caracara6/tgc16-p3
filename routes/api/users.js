@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
     
         if (user && user.get('password') == getHashedPassword(req.body.password)){
             console.log(user.toJSON())
-            let accessToken = generateToken(user.toJSON(), process.env.TOKEN_SECRET, "1h");
+            let accessToken = generateToken(user.toJSON(), process.env.TOKEN_SECRET, "900s");
             let refreshToken = generateToken(user.toJSON(), process.env.REFRESH_TOKEN_SECRET, "1w");
             
             return res.status(200).send({
@@ -80,11 +80,11 @@ router.post('/login', async (req, res) => {
                 refreshToken
             })
         } 
-        // else if (!user){
-        //     return res.status(400).send({
-        //         'error':"This email is not associated with this website"
-        //     })
-        // } 
+        else if (!user){
+            return res.status(400).send({
+                'error':"This email is not associated with this website"
+            })
+        } 
         else {
             return res.status(400).send({
                 'error':"Wrong email or password"
