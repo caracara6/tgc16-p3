@@ -25,11 +25,11 @@ const checkIfAuthenticatedJWT = function(req,res,next) {
         // console.log('authHeader => ', authHeader)
         const token = authHeader.split(' ')[1];
 
-        // console.log('access token =>', token)
+        console.log('access token =>', token)
 
         jwt.verify(token, process.env.TOKEN_SECRET, function(err, payload){
             if (err) {
-                console.log('status 403')
+                console.log(err)
                 return res.sendStatus(403);
             }
 
