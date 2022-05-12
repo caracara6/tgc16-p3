@@ -34,7 +34,7 @@ async function getAllOrders() {
 async function createOrderBreakdown(orderId, orderData){
     let orderBreakdown = new OrderBreakdown({
         order_id: orderId,
-        product_id: orderData.productId,
+        product_id: orderData.product_id,
         quantity: orderData.quantity
     })
     return await orderBreakdown.save()
