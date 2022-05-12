@@ -23,7 +23,7 @@ router.post('/', checkIfAuthenticatedJWT, async function(req, res){
     let insufficientStockItems = await cartServices.stockCheck()
 
     if(insufficientStockItems.length > 0){
-        //throw or return??
+        
         return res.status(400).send({"message": "Some items in your cart are out of stock. Your cart has been updated"})
     }
 
@@ -91,6 +91,8 @@ router.post('/process_payment', express.raw({type: 'application/json'}), async (
             let stripeEvent = event.data.object;
 
             console.log('checkout completed =>', stripeEvent)
+
+            await OrderServices.createOrder(stripeEvent)
 
         }
     } catch(e) {

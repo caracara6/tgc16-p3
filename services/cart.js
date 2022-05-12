@@ -89,8 +89,6 @@ class CartServices {
                     quantityInStock ? 
                     
                     await cartDAL.updateCartItemQuantity(this.userId, item.related('product').get('id'), quantityInStock) : await cartDAL.removeFromCart(this.userId, item.related('product').get('id'))
-                    // console.log(quantityInStock)
-                    // await cartDAL.updateCartItemQuantity(this.userId, item.related('product').get('id'), item.related('product').get('stock'))
                 }
             )
         }
