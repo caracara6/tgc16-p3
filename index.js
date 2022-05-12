@@ -24,6 +24,8 @@ app.use(express.static("public"));
 wax.on(hbs.handlebars);
 wax.setLayoutPath("./views/layouts");
 
+app.use(cors({credentials: true}));
+
 // enable forms
 app.use(
 	express.urlencoded({
@@ -31,7 +33,7 @@ app.use(
 	})
 );
 
-app.use(cors());
+
 
 app.use(session({
     'store': new FileStore(),
