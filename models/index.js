@@ -64,7 +64,7 @@ const UserType = bookshelf.model('UserType',{
 })
 
 const Order = bookshelf.model('Order',{
-    tableName: 'order',
+    tableName: 'orders',
     user: function() {
         return this.belongsTo('User')
     },
