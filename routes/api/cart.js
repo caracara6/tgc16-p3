@@ -52,7 +52,7 @@ router.put('/:product_id', checkIfAuthenticatedJWT, async function(req, res){
             if(result){
                 return res.status(200).send({"message" : "Quantity changed successfully"})
             } else {
-                return res.status(400).send({"message":"There is not enough of this item in stock"})
+                return res.status(400).send({"message":`Sorry, there ${req.body.newQuantity - 1 === 1 ? 'is' : 'are'} only ${req.body.newQuantity - 1} of this item left in stock`})
             }
         } else if(parseInt(req.body.newQuantity) < 0){
             return res.status(400).send({"message": "Please enter a positive number"})
