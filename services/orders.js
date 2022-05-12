@@ -6,6 +6,8 @@ async function createOrderBreakdown(orderId, orderData){
 
 async function createOrder(stripeSessionEvent) {
 
+    console.log('testing order creation')
+
     let shippingAddress = `
     Addressee: ${stripeSessionEvent.shipping.name}
     -Address Line 1: ${stripeSessionEvent.shipping.address.line1}
