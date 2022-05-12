@@ -67,7 +67,7 @@ exports.up = function (db) {
 			type: 'string',
 			length: '500'
 		},
-		shippping_address: {
+		shipping_address: {
 			type: "string",
 			length: 500,
 			notNull: true
