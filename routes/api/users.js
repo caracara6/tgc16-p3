@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
     
         if (user && user.get('password') == getHashedPassword(req.body.password)){
             console.log(user.toJSON())
-            let accessToken = generateToken(user.toJSON(), process.env.TOKEN_SECRET, "60s");
+            let accessToken = generateToken(user.toJSON(), process.env.TOKEN_SECRET, "900s");
             let refreshToken = generateToken(user.toJSON(), process.env.REFRESH_TOKEN_SECRET, "1w");
             
             return res.status(200).send({

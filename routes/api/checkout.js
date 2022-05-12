@@ -27,8 +27,6 @@ router.post('/', checkIfAuthenticatedJWT, async function(req, res){
         return res.status(400).send(insufficientStockItems, {"message": "Some items in your cart are out of stock. Your cart has been updated"})
     }
 
-
-
     let lineItems = [];
     let meta = [];
 

@@ -17,19 +17,19 @@ const checkIfAuthorised = (req, res, next) => {
 const checkIfAuthenticatedJWT = function(req,res,next) {
     const authHeader = req.headers.authorization;
 
-    console.log('req.headers', req.headers)
+    // console.log('req.headers', req.headers)
 
-    console.log('authHeader', authHeader)
+    // console.log('authHeader', authHeader)
 
     if (authHeader) {
         // console.log('authHeader => ', authHeader)
         const token = authHeader.split(' ')[1];
 
-        console.log('access token =>', token)
+        // console.log('access token =>', token)
 
         jwt.verify(token, process.env.TOKEN_SECRET, function(err, payload){
             if (err) {
-                console.log(err)
+                // console.log(err)
                 return res.sendStatus(403);
             }
 
@@ -37,7 +37,7 @@ const checkIfAuthenticatedJWT = function(req,res,next) {
             next();
         })
     } else {
-        console.log('status 403 2')
+        // console.log('status 403 2')
         res.sendStatus(403);
     }
 }
