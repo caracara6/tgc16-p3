@@ -94,6 +94,8 @@ router.post('/process_payment', express.raw({type: 'application/json'}), async (
 
             await OrderServices.createOrder(stripeEvent)
 
+            res.status(200).send('Order Received')
+
         }
     } catch(e) {
         res.send({
@@ -102,13 +104,13 @@ router.post('/process_payment', express.raw({type: 'application/json'}), async (
     }
 })
 
-router.get('/success', function (req, res) {
-    res.send({'message' : 'Your order has been confirmed'})
-})
+// router.get('/success', function (req, res) {
+//     res.send({'message' : 'Your order has been confirmed'})
+// })
 
-router.get('/cancelled', function (req, res) {
-    res.send({'message': 'Your order has been cancelled'})
-})
+// router.get('/cancelled', function (req, res) {
+//     res.send({'message': 'Your order has been cancelled'})
+// })
 
 
 
