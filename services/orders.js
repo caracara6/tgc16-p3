@@ -1,4 +1,5 @@
 const orderDAL = require('../dal/orders');
+const cartDAL = require('../dal/cart_items')
 
 async function createOrderBreakdown(orderId, orderData){
     return await orderDAL.createOrderBreakdown(orderId, orderData)
@@ -31,9 +32,15 @@ async function createOrder(stripeSessionEvent) {
 
     allOrderedItems.map( async(item) => {
         await orderDAL.createOrderBreakdown(newOrderId, item)
+        await cartDAL.removeFromCart(stripeSessionEvent.client_reference_id, item.product_id)
+        
     })
 
-    //need to remove cart items and 
+    // allOrderedItems.map( async(item) => {
+    //     await cartDAL.removeFromCart(stripeSessionEvent.client_reference_id, item.product_id)
+    // })
+
+    //need to update stock
 
 }
 

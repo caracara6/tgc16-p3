@@ -1,3 +1,4 @@
+const e = require('connect-flash');
 const express = require('express');
 const router = express.Router();
 
@@ -23,7 +24,6 @@ router.post('/', checkIfAuthenticatedJWT, async function(req, res){
     let insufficientStockItems = await cartServices.stockCheck()
 
     if(insufficientStockItems.length > 0){
-        
         return res.status(400).send({"message": "Some items in your cart are out of stock. Your cart has been updated"})
     }
 
