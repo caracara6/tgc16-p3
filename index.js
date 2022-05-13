@@ -54,7 +54,7 @@ app.use(function(req,res,next){
 const csurfInstance = csrf();
 app.use(function(req,res,next){
 
-    if (req.url === '/checkout/process_payment' || req.url.slice(0,5)=='/api2') {
+    if (req.url === '/checkout/process_payment' || req.url.slice(0,5)=='/api/') {
         next();
     } else {
         csurfInstance(req,res,next);
