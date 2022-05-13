@@ -36,9 +36,8 @@ async function createOrder(stripeSessionEvent) {
         await cartDAL.removeFromCart(stripeSessionEvent.client_reference_id, item.product_id)
 
         let productToUpdate = productDAL.getProductById(item.product_id)
-        console.log('productToUpdate', productToUpdate)
-        let stock = productToUpdate.get('quantity')
-        productToUpdate.set('quantity', stock - item.quantity)
+        
+        productToUpdate.set('stock', productToUpdate.get('stock') - item.quantity)
         await productToUpdate.save()
 
     })
