@@ -35,7 +35,7 @@ async function createOrder(stripeSessionEvent) {
         await orderDAL.createOrderBreakdown(newOrderId, item)
         await cartDAL.removeFromCart(stripeSessionEvent.client_reference_id, item.product_id)
 
-        let productToUpdate = productDAL.getProductById(item.product_id)
+        let productToUpdate = await productDAL.getProductById(item.product_id)
 
         console.log('productToUpdate', productToUpdate)
         let stock = productToUpdate.get("stock")
