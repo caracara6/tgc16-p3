@@ -24,7 +24,9 @@ app.use(express.static("public"));
 wax.on(hbs.handlebars);
 wax.setLayoutPath("./views/layouts");
 
-app.use(cors({origin: '*'}));
+app.use(cors());
+app.options('**', cors());
+
 
 // enable forms
 app.use(
