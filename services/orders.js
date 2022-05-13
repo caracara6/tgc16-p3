@@ -37,6 +37,7 @@ async function createOrder(stripeSessionEvent) {
 
         let productToUpdate = productDAL.getProductById(item.product_id)
 
+        console.log('productToUpdate', productToUpdate)
         let stock = productToUpdate.get("stock")
         
         productToUpdate.set('stock', stock - item.quantity)
