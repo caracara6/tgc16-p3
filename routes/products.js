@@ -693,7 +693,7 @@ router.post('/product/create', async (req, res) => {
             res.redirect('/product-related/product');
         },
         'error': async (form) => {
-            res.render('products/create', {
+            res.render('product/create', {
                 'form': form.toHTML(bootstrapField),
                 'cloudinaryName': process.env.CLOUDINARY_NAME,
                 'cloudinaryApiKey': process.env.CLOUDINARY_API_KEY,
