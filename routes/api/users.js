@@ -48,8 +48,15 @@ router.post('/register', async function (req, res) {
                 password : getHashedPassword(password),
                 user_type_id: 3
             })
-            await newUser.save() 
-            return res.status(200).send({"message": "Registration successful"})
+            await newUser.save()
+
+            let accessToken = generateToken(newUser.toJSON(), process.env.TOKEN_SECRET, "900s");
+            let refreshToken = generateToken(newUser.toJSON(), process.env.REFRESH_TOKEN_SECRET, "1w");
+
+            return res.status(200).send({
+                accessToken,
+                refreshToken
+            })
         }
         
     } catch(e) {
