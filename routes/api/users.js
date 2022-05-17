@@ -38,6 +38,7 @@ router.post('/register', async function (req, res) {
         let user = await userDAL.getUserByEmail(email)
 
         if(user){
+            console.log(user.toJSON())
             return res.status(400).send({"message" : "This email has been used to sign up for an account"})
 
         } else {
