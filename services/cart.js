@@ -53,7 +53,13 @@ class CartServices {
             console.log('===============')
             console.log('4')
 
-            return "This item is currently out of stock"
+            cartItem = await cartDAL.createCartItem(
+                this.userId,
+                productId,
+                currentStock
+            )
+
+            return "There is insufficient stock for the quantity you selected. Your cart has been updated"
         }
     }
 
