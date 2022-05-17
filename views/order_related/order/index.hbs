@@ -1,0 +1,57 @@
+{{#extends 'base'}}
+
+{{#block "content"}}
+
+<div class="m-3">
+
+    <form method="GET">
+        {{{searchForm}}}
+        <input type="submit" class="btn btn-primary mt-3" />
+    </form>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">User Id</th>
+                <th scope="col">Total Amount</th>
+                <th scope="col">Payment reference</th>
+                <th scope="col">Shipping Address</th>
+                <th scope="col">Status</th>
+                <th scope="col">Products</th>
+                <th scope="col">Date Placed</th>
+                <th scope="col">Date Updated</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each orders}}
+            <tr>
+                <td>{{this.id}}</td>
+                <td>{{this.user_id}}</td>
+                <td>{{this.total_amount}}</td>
+                <td>{{this.payment_reference}}</td>
+                <td>{{this.shipping_address}}</td>
+                <td>{{this.order_status.name}}</td>
+                <td>
+                    {{#each this.products}}
+                    <span class="badge bg-primary">{{this.name}}</span>
+                    {{/each}}
+                </td>
+                <td>{{this.date_placed}}</td>
+                <td>{{this.date_updated}}</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="/order-related/order/{{this.id}}/update">Update</a>
+                    <a class="btn btn-danger btn-sm" href="/order-related/order/{{this.id}}/delete">Delete</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+</div>
+
+{{/block}}
+
+{{/extends}}

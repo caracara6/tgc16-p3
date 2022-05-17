@@ -80,38 +80,43 @@ router.get('/grape-varietals', async (req, res) => {
 })
 
 router.get('/products', async (req, res) => {
-    // try {
-        let products = await productDAL.getAllProducts(req.query)
+    try {
+        // let products = await productDAL.getAllProducts(req.query)
 
-        // let q = Product.collection();
+        let q = Product.collection();
 
-        // if(req.query.searchInput){
-        //     q.where('name', 'ILIKE', '%' + query.searchInput + '%')
-        // }
+        if (req.query.categoryFilter) {
+            q.where('category_id', '=', query.categoryFilter)
+        }
+
+        if (query.searchInput) {
+            q = q.query(qb => {
+                qb.where('name', 'ilike', '%' + query.searchInput + '%')
+                .orWhere('description', 'ilike', '%' + query.searchInput + '%')
+                .orWhere('nose_attribute', 'ilike', '%' + query.searchInput + '%')
+                .orWhere('mouth_attribute', 'ilike', '%' + query.searchInput + '%')
+            })
+        }
 
         console.log(req.query)
 
-        // let products = await q.fetch({
-        //     withRelated: [
-        //         'category', 
-        //         'origin_country', 
-        //         'region', 
-        //         'producer', 
-        //         'grape_varietals', 
-        //         'sizes'
-        //     ]
-        // });
-
-
-        //req.query filter here
-        // console.log(products.toJSON())
+        let products = await q.fetch({
+            withRelated: [
+                'category', 
+                'origin_country', 
+                'region', 
+                'producer', 
+                'grape_varietals', 
+                'sizes'
+            ]
+        });
 
         res.status(200).send(products)
 
 
-    // } catch (e) {
-    //     res.status(500).send({ "message": "Unable to retrieve products due to internal server error" })
-    // }
+    } catch (e) {
+        res.status(500).send({ "message": "Unable to retrieve products due to internal server error" })
+    }
 })
 
 router.get('/products/:product_id', async (req, res) => {

@@ -49,6 +49,9 @@ const Product = bookshelf.model('Product', {
     },
     sizes: function() {
         return this.belongsToMany('Size');
+    },
+    orders: function() {
+        return this.belongsToMany('Order');
     }
 });
 
@@ -71,13 +74,16 @@ const Order = bookshelf.model('Order',{
     order_status: function() {
         return this.belongsTo('OrderStatus')
     },
-    order_breakdown: function() {
+    order_breakdowns: function() {
         return this.hasMany('OrderBreakdown')
+    },
+    products: function() {
+        return this.belongsToMany('Product');
     }
 })
 
 const OrderBreakdown = bookshelf.model('OrderBreakdown', {
-    tableName: 'order_breakdown',
+    tableName: 'orders_product',
     order: function() {
         return this.belongsTo('Order')
     },

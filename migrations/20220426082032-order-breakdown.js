@@ -15,7 +15,7 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db) {
-	return db.createTable("order_breakdown", {
+	return db.createTable("orders_product", {
 		id: {
 			type: "int",
 			primaryKey: true,
@@ -37,7 +37,7 @@ exports.up = function (db) {
 				mapping: "id",
 				rules: {
 					onDelete: "CASCADE",
-					onUpdate: "RESTRICT",
+					onUpdate: "CASCADE",
 				}
 			}
 		},
@@ -50,8 +50,8 @@ exports.up = function (db) {
 				table: "product",
 				mapping: "id",
 				rules: {
-					onDelete: "RESTRICT",
-					onUpdate: "RESTRICT",
+					onDelete: "CASCADE",
+					onUpdate: "CASCADE",
 				}
 			}
 		}
@@ -59,7 +59,7 @@ exports.up = function (db) {
 };
 
 exports.down = function (db) {
-	return db.dropTable("order_breakdown");
+	return db.dropTable("orders_product");
 };
 
 exports._meta = {

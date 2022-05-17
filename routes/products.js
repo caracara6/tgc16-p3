@@ -20,9 +20,11 @@ const {
     grapeVarietalForm,
     sizeForm,
     producerForm,
-    productForm
+    productForm,
+    searchProductForm
 } = require('../forms');
-const async = require('hbs/lib/async');
+
+// const async = require('hbs/lib/async');
 
 
 // router.get('/product/create', async (req, res)=>{
@@ -608,12 +610,108 @@ router.post('/producer/:producer_id/delete', async function (req, res) {
 router.get('/product', async function (req, res) {
     // let products = await productDAL.getAllProducts();
 
-    let products = await Product.collection().fetch({
-        withRelated: ['category', 'origin_country', 'region', 'producer', 'grape_varietals', 'sizes']
-    })
+    const allCategories = await productDAL.getAllCategories()
+    allCategories.unshift(["", "All"])
+    const allCountries = await productDAL.getAllCountries()
+    allCountries.unshift(["", "All"])
+    const allRegions = await productDAL.getAllRegions()
+    allRegions.unshift(["", "All"])
+    const allProducers = await productDAL.getAllProducers()
+    allProducers.unshift(["", "All"])
+    const allGrapeVarietals = await productDAL.getAllGrapeVarietals()
 
-    res.render('product_related/product/index', {
-        products: products.toJSON()
+    const searchForm = searchProductForm(allCategories, allCountries, allRegions, allProducers, allGrapeVarietals);
+
+    let q = Product.collection();
+
+    searchForm.handle(req, {
+        'success': async function (form) {
+
+            if (form.data.search_input) {
+                q = q.query(qb => {
+                        qb.where('name', 'like', '%' + form.data.search_input + '%')
+                        .orWhere('description', 'like', '%' + form.data.search_input + '%')
+                        .orWhere('nose_attribute', 'like', '%' + form.data.search_input + '%')
+                        .orWhere('mouth_attribute', 'like', '%' + form.data.search_input + '%')
+                    })
+            }
+
+            if (form.data.min_cost) {
+                q.where('price', '>=', form.data.min_cost);
+            }
+
+            if (form.data.max_cost) {
+                q.where('price', '<=', form.data.max_cost);
+            }
+
+            if (form.data.category_id) {
+                q.where('category_id', '=', form.data.category_id)
+            }
+
+            if (form.data.origin_country_id) {
+                q.where('origin_country_id', '=', form.data.origin_country_id)
+            }
+
+            if (form.data.region_id) {
+                q.where('region_id', '=', form.data.region_id)
+            }
+
+            if (form.data.producer_id) {
+                q.where('producer_id', '=', form.data.producer_id)
+            }
+
+            if (form.data.grape_varietals) {
+                q.query('join', 'grape_varietal_product', 'product.id', 'product_id')
+                    .where('grape_varietal_id', 'in', form.data.grape_varietals.split(','))
+            }
+
+            let products = await q.fetch({
+                withRelated: [
+                    'category',
+                    'origin_country',
+                    'region',
+                    'producer',
+                    'grape_varietals',
+                    'sizes'
+                ]
+            })
+            res.render('product_related/product/index', {
+                products: products.toJSON(),
+                searchForm: form.toHTML(bootstrapField)
+            })
+        },
+        'error': async function (form) {
+            let products = await q.fetch({
+                withRelated: [
+                    'category',
+                    'origin_country',
+                    'region',
+                    'producer',
+                    'grape_varietals',
+                    'sizes'
+                ]
+            })
+            res.render('product_related/product/index', {
+                products: products.toJSON(),
+                searchForm: form.toHTML(bootstrapField)
+            })
+        },
+        'empty' : async function(form){
+            let products = await q.fetch({
+                withRelated: [
+                    'category',
+                    'origin_country',
+                    'region',
+                    'producer',
+                    'grape_varietals',
+                    'sizes'
+                ]
+            })
+            res.render('product_related/product/index', {
+                products: products.toJSON(),
+                searchForm: form.toHTML(bootstrapField)
+            })
+        }
     })
 })
 

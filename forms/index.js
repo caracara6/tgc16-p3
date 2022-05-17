@@ -297,6 +297,134 @@ const loginForm = () => {
     })
 }
 
+const searchProductForm = function (categories, countries, regions, producers, grapeVarietals) {
+    return forms.create({
+        'search_input': fields.string({
+            label: 'Search Input',
+            required: false,
+            errorAfterField: true
+        }),
+        'min_cost': fields.string({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.integer(), validators.min(0)]
+        }),
+        'max_cost': fields.string({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.integer(), validators.min(0)]
+        }),
+        'category_id': fields.string({
+            label: 'Category',
+            required: false,
+            errorAfterField: true,
+            widget: widgets.select(),
+            choices: categories
+        }),
+        'origin_country_id': fields.string({
+            label: 'Country',
+            required: false,
+            errorAfterField: true,
+            widget: widgets.select(),
+            choices: countries
+        }),
+        'region_id': fields.string({
+            label: 'Region',
+            required: false,
+            errorAfterField: true,
+            widget: widgets.select(),
+            choices: regions
+        }),
+        'producer_id': fields.string({
+            label: 'Winery',
+            required: false,
+            errorAfterField: true,
+            widget: widgets.select(),
+            choices: producers
+        }),
+        'grape_varietals': fields.string({
+            required: false,
+            errorAfterField: true,
+            widget: widgets.multipleSelect(),
+            choices: grapeVarietals
+        })
+    })
+}
+
+const searchOrderForm = function (orderStatuses, products) {
+    return forms.create({
+        'order_status_id': fields.string({
+            label: 'Order Status',
+            required: false,
+            errorAfterField: true,
+            widget: widgets.multipleSelect(),
+            choices: orderStatuses
+        }),
+        'products': fields.string({
+            label: 'Product',
+            required: false,
+            errorAfterField: true,
+            widget: widgets.multipleSelect(),
+            choices: products
+        }),
+        'min_amount': fields.string({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.integer(), validators.min(0)]
+        }),
+        'max_amount': fields.string({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.integer(), validators.min(0)]
+        }),
+    })
+}
+
+const orderForm = (orderStatuses) => {
+    return forms.create({
+        // total_amount: fields.string({
+        //     label: 'Total Amount',
+        //     required: true,
+        //     errorAfterField: true,
+        //     validators: [
+        //         validators.required("Please enter the amount"),
+        //         validators.integer("Please enter the amount using numbers"), 
+        //         validators.min(0, "Please enter a positive number")
+        //     ]
+        // }),
+        // payment_reference: fields.string({
+        //     label: 'Payment reference',
+        //     required: true,
+        //     errorAfterField: true,
+        //     validators: [
+        //         validators.required("Please enter the name of the wine")
+        //     ]
+        // }),
+        order_status_id: fields.string({
+            label: 'Order Status',
+            required: true,
+            errorAfterField: true,
+            widget: widgets.select(),
+            choices: orderStatuses
+        }),
+        // shipping_address: fields.string({
+        //     label: 'Shipping Address',
+        //     required: true,
+        //     errorAfterField: true,
+        //     validators: [
+        //         validators.required("Please enter the shipping address"),
+        //         validators.maxlength(500, "Please enter an address shorter than 500 characters")
+        //     ]
+        // }),
+        // products: fields.string({
+        //     required: true,
+        //     errorAfterField: true,
+        //     widget: widgets.multipleSelect(),
+        //     choices: products
+        // })
+    })
+}
+
 
 module.exports = {
     bootstrapField, 
@@ -308,5 +436,8 @@ module.exports = {
     producerForm,
     productForm,
     registrationForm,
-    loginForm
+    loginForm,
+    searchProductForm,
+    searchOrderForm,
+    orderForm
 }

@@ -86,7 +86,8 @@ const http = {
 	landingRoutes: require('./routes/landing'),
 	productRoutes: require('./routes/products'),
     userRoutes: require('./routes/users'),
-    cloudinaryRoutes: require('./routes/cloudinary')
+    cloudinaryRoutes: require('./routes/cloudinary'),
+    orderRoutes: require('./routes/orders')
 
 }
 
@@ -106,6 +107,7 @@ async function main() {
 	app.use("/product-related", checkIfAuthorised, http.productRoutes);
     app.use('/cloudinary', http.cloudinaryRoutes);
     app.use('/user', http.userRoutes)
+    app.use('/order-related', checkIfAuthorised, http.orderRoutes)
     app.use('/api/user', express.json(), api.userRoutes);
     app.use('/api/product-related', express.json(), api.productRoutes);
     app.use('/api/cart', express.json(), api.cartRoutes);
@@ -115,6 +117,6 @@ async function main() {
 
 main();
 
-app.listen(process.env.PORT, () => {
+app.listen(8888, () => {
 	console.log("Server has started");
 });

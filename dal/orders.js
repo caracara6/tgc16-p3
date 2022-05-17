@@ -8,6 +8,12 @@ async function getAllOrderStatuses() {
     return await OrderStatus.fetchAll().map(status => [status.get('id'), status.get('name')])
 }
 
+async function getOrderById(orderId) {
+    return await Order.where({
+        'id': orderId
+    }).fetch()
+}
+
 async function getAllOrdersByUser(userId) {
     return await Order.collection().where({
         user_id: userId
@@ -69,6 +75,7 @@ async function createOrder(orderData) {
 
 module.exports = { 
     getAllOrderStatuses,
+    getOrderById,
     getAllOrdersByUser,
     getSpecificOrderByUser,
     getAllOrders,
