@@ -89,12 +89,12 @@ router.get('/products', async (req, res) => {
             q.where('category_id', '=', query.categoryFilter)
         }
 
-        if (query.searchInput) {
+        if (req.query.searchInput) {
             q = q.query(qb => {
-                qb.where('name', 'ilike', '%' + query.searchInput + '%')
-                .orWhere('description', 'ilike', '%' + query.searchInput + '%')
-                .orWhere('nose_attribute', 'ilike', '%' + query.searchInput + '%')
-                .orWhere('mouth_attribute', 'ilike', '%' + query.searchInput + '%')
+                qb.where('name', 'ilike', '%' + req.query.searchInput + '%')
+                .orWhere('description', 'ilike', '%' + req.query.searchInput + '%')
+                .orWhere('nose_attribute', 'ilike', '%' + req.query.searchInput + '%')
+                .orWhere('mouth_attribute', 'ilike', '%' + req.query.searchInput + '%')
             })
         }
 
