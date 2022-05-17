@@ -86,7 +86,7 @@ router.get('/products', async (req, res) => {
         let q = Product.collection();
 
         if (req.query.categoryFilter) {
-            q.where('category_id', '=', query.categoryFilter)
+            q.where('category_id', '=', req.query.categoryFilter)
         }
 
         if (req.query.searchInput) {
@@ -98,7 +98,7 @@ router.get('/products', async (req, res) => {
             })
         }
 
-        console.log(req.query)
+        // console.log(req.query)
 
         let products = await q.fetch({
             withRelated: [
