@@ -29,7 +29,7 @@ router.post('/:product_id', checkIfAuthenticatedJWT, async function(req, res) {
         let cartServices = new CartServices(req.user.id)
         console.log('testing req.params', typeof req.params.product_id)
         let valResult = await cartServices.addToCart(req.params.product_id, parseInt(req.body.quantity))
-        console.log('testing add to cart 2')
+        console.log('============', valResult)
         res.status(200).send({ "message" : valResult })
 
     } catch (e) {

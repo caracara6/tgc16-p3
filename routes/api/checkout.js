@@ -12,21 +12,9 @@ router.post('/', checkIfAuthenticatedJWT, async function(req, res){
     
     const cartServices = new CartServices(req.user.id)
 
-
-
-    if(req.body){
-        console.log('hello world')
-    }
-
-
-
-
-
-
-
     let items = await cartServices.getCart();
 
-    console.log(items)
+    // console.log(items)
 
     if(items.length == 0){
         return res.status(400).send({"message":"Your cart is empty"})
