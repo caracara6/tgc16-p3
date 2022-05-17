@@ -128,7 +128,6 @@ async function getAllProducts() {
 }
 
 async function getProductById(productId) {
-    console.log('testing getProductById', typeof productId)
     return await Product.where({
         'id': productId,
     }).fetch({

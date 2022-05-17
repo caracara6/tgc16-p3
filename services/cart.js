@@ -50,6 +50,7 @@ class CartServices {
             
             //product not yet in user's cart and insufficient stock
         } else if( !cartItem && currentStock == 0) {
+            console.log('===============')
             console.log('4')
 
             return "This item is currently out of stock"
