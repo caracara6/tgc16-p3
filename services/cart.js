@@ -49,7 +49,7 @@ class CartServices {
             return "You have added this item to your cart succesfully";
             
             //product not yet in user's cart and insufficient stock
-        } else if( !cartItem && currentStock == 0) {
+        } else if( !cartItem && currentStock < quantity) {
             console.log('===============')
             console.log('4')
 
