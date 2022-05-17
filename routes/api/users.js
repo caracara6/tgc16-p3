@@ -42,7 +42,6 @@ router.post('/register', async function (req, res) {
             return res.status(400).send({"message" : "This email has been used to sign up for an account"})
 
         } else {
-            console.log('testing register')
             let newUser = new User({
                 first_name,
                 last_name,
