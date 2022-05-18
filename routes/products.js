@@ -927,7 +927,7 @@ router.post('/product/:product_id/delete', async function (req, res) {
     // console.log(relatedCartItemsAndOrders.toJSON().orders)
     // console.log(relatedCartItemsAndOrders.toJSON().orders.length)
     // console.log(typeof relatedCartItemsAndOrders.toJSON().orders.length)
-    if(relatedCartItemsAndOrders.toJSON().cart_items.length === 0 && relatedCartItemsAndOrders.toJSON().orders === 0){
+    if(relatedCartItemsAndOrders.toJSON().cart_items.length === 0 && relatedCartItemsAndOrders.toJSON().orders.length === 0){
         await product.destroy();
         req.flash("success_msg", "Product has been deleted successfully!")
         res.redirect('/product-related/product')
