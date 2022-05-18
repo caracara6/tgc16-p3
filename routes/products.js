@@ -924,7 +924,10 @@ router.get('/product/:product_id/delete', async function (req, res) {
 
 router.post('/product/:product_id/delete', async function (req, res) {
     const relatedCartItemsAndOrders = await productDAL.getRelatedProductOrders(req.params.product_id);
-    console.log(relatedCartItemsAndOrders.toJSON())
+    console.log(relatedCartItemsAndOrders.toJSON().orders)
+    console.log(relatedCartItemsAndOrders.toJSON().orders.length)
+    console.log(typeof relatedCartItemsAndOrders.toJSON().orders.length)
+    // if(relatedCartItemsAndOrders.toJSON().cart_items.length && relatedCartItemsAndOrders.toJSON().orders)
     // await product.destroy();
     res.redirect('/product-related/product')
 })
