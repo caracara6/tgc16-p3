@@ -923,11 +923,11 @@ router.get('/product/:product_id/delete', async function (req, res) {
 })
 
 router.post('/product/:product_id/delete', async function (req, res) {
-    const relatedCartItemsAndOrders = await productDAL.getRelatedProductOrders(req.params.product_id);
+    const product = await productDAL.getRelatedProductOrders(req.params.product_id);
     // console.log(relatedCartItemsAndOrders.toJSON().orders)
     // console.log(relatedCartItemsAndOrders.toJSON().orders.length)
     // console.log(typeof relatedCartItemsAndOrders.toJSON().orders.length)
-    if(relatedCartItemsAndOrders.toJSON().cart_items.length === 0 && relatedCartItemsAndOrders.toJSON().orders.length === 0){
+    if(product.toJSON().cart_items.length === 0 && product.toJSON().orders.length === 0){
         await product.destroy();
         req.flash("success_msg", "Product has been deleted successfully!")
         res.redirect('/product-related/product')
