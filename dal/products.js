@@ -141,7 +141,18 @@ async function getProductById(productId) {
             'sizes'
         ]
     });
+}
 
+async function getRelatedProductOrders(productId) {
+    return await Product.where({
+        'id': productId,
+    }).fetch({
+        require: true,
+        withRelated: [
+            'orders',
+            'cart_items'
+        ]
+    });
 }
 
 
@@ -160,5 +171,6 @@ module.exports = {
     getAllGrapeVarietals,
     getGrapeVarietalByID,
     getAllProducts,
-    getProductById
+    getProductById,
+    getRelatedProductOrders
 }

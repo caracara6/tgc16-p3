@@ -52,6 +52,9 @@ const Product = bookshelf.model('Product', {
     },
     orders: function() {
         return this.belongsToMany('Order');
+    },
+    cart_items: function() {
+        return this.hasMany('CartItem')
     }
 });
 

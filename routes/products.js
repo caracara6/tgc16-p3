@@ -923,8 +923,9 @@ router.get('/product/:product_id/delete', async function (req, res) {
 })
 
 router.post('/product/:product_id/delete', async function (req, res) {
-    const product = await productDAL.getProductById(req.params.product_id);
-    await product.destroy();
+    const relatedCartItemsAndOrders = await productDAL.getRelatedProductOrders(req.params.product_id);
+    console.log(relatedCartItemsAndOrders)
+    // await product.destroy();
     res.redirect('/product-related/product')
 })
 
