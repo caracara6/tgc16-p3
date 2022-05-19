@@ -1,4 +1,3 @@
-const e = require('connect-flash');
 const express = require('express');
 const router = express.Router();
 
@@ -13,8 +12,6 @@ router.post('/', checkIfAuthenticatedJWT, async function(req, res){
     const cartServices = new CartServices(req.user.id)
 
     let items = await cartServices.getCart();
-
-    // console.log(items)
 
     if(items.length == 0){
         return res.status(400).send({"message":"Your cart is empty"})
@@ -46,8 +43,6 @@ router.post('/', checkIfAuthenticatedJWT, async function(req, res){
         })
     }
 
-    console.log('meta =>', JSON.stringify(meta))
-
     const payment = {
         client_reference_id: req.user.id,
         payment_method_types: ['card'],
@@ -65,13 +60,6 @@ router.post('/', checkIfAuthenticatedJWT, async function(req, res){
 
     let stripeSession = await Stripe.checkout.sessions.create(payment)
 
-    console.log(stripeSession)
-
-    // res.status(200).send({
-    //     sessionId: stripeSession.id,
-    //     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-    //   });
-
     res.status(200).send({ url: stripeSession.url })
 })
 
@@ -88,8 +76,6 @@ router.post('/process_payment', express.raw({type: 'application/json'}), async (
         console.log(event)
         if (event.type ==  "checkout.session.completed") {
             let stripeEvent = event.data.object;
-
-            console.log('checkout completed =>', stripeEvent)
 
             await OrderServices.createOrder(stripeEvent)
 
