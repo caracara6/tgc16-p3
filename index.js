@@ -118,5 +118,5 @@ async function main() {
 main();
 
 app.listen(process.env.PORT, () => {
-	console.log("Server has started");
+	console.log("Server has started " + process.env.PORT);
 });

@@ -31,7 +31,20 @@ const getHashedPassword = (password) => {
 
 router.post('/register', async function (req, res) {
 
-    let { first_name, last_name, email, password } = req.body
+    let { first_name, last_name, email, password } = req.body;
+
+    if(!first_name || !last_name){
+        return res.status(400).send({"message": "Please enter a valid name"});
+    }
+
+
+    if(!email || !email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
+        return res.status(400).send({"message": "Please enter a valid email"});
+    }
+
+    if(!password){
+        return res.status(400).send({"message": "Please enter a valid password"});
+    }
 
     try{
 
@@ -70,15 +83,25 @@ router.post('/register', async function (req, res) {
 
 router.post('/login', async (req, res) => {
 
+    let { email, password } = req.body;
+
+    if(!email || !email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
+        return res.status(400).send({"message": "Please enter a valid email"});
+    }
+
+    if(!password){
+        return res.status(400).send({"message": "Please enter a valid password"});
+    }
+
     try{
 
         let user = await User.where({
-            'email': req.body.email
+            email
         }).fetch({
             require: false
         });
     
-        if (user && user.get('password') == getHashedPassword(req.body.password)){
+        if (user && user.get('password') == getHashedPassword(password)){
             console.log(user.toJSON())
             let accessToken = generateToken(user.toJSON(), process.env.TOKEN_SECRET, "900s");
             let refreshToken = generateToken(user.toJSON(), process.env.REFRESH_TOKEN_SECRET, "1w");
@@ -100,7 +123,7 @@ router.post('/login', async (req, res) => {
         }
 
     } catch (e) {
-        res.status(500).send({'message': "Internal server error, please contatc administrator"})
+        res.status(500).send({'message': "Internal server error, please contact administrator"})
     }
 })
 
